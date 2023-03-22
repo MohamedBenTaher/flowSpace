@@ -1,22 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { PrismaService } from './prisma/prisma.service';
+import { PrismaModule } from './prisma/prisma.module';
+import { PostModule } from './post/post.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "root",
-    password: "",
-    database: "flowspace",
-    logging: true,
-    entities: ['dist/**/*.entity.js'],
-    subscribers: [],
-    migrations: [],
-  })],
+  imports: [ AuthModule,UserModule, PrismaModule, PostModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}
