@@ -1,26 +1,61 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-
+import { AuthDto } from './dto/auth.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import * as bcrypt from 'bcrypt'
+import { jwtConstants } from './constants';
+import { Tokens } from './types';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { JwtService } from '@nestjs/jwt/dist';
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(private readonly prisma :PrismaService,
+    private readonly jwtService:JwtService){
+
+  }
+  hashData(data:string){
+    return bcrypt.hash(data,10)
+  }
+  async getTokens(userId:number,email:string):Promise<Tokens>{
+    const [accessToken,refreshToken]=await Promise.all([
+    this.jwtService.signAsync({
+      sub:userId,
+      email,
+    },{
+      secret:jwtConstants.secret,
+      expiresIn: 60*15,
+    }),
+    this.jwtService.signAsync({
+      sub:userId,
+      email,
+    },{
+      secret:jwtConstants.secret,
+      expiresIn: 60*60*24*7,
+    })
+  ])
+  return {
+    access_token:accessToken,
+    refresh_token:refreshToken
+  }
+  }
+  
+  async register(authDto:CreateUserDto):Promise<Tokens> {
+    const hash=await this.hashData(authDto.password)
+    authDto.hash=hash;
+    const newUser=await this.prisma.user.create({data:authDto});
+    const tokens=await this.getTokens(newUser.id,newUser.email)
+    return tokens;
   }
 
-  findAll() {
+  signInLocal() {
     return `This action returns all auth`;
   }
 
-  findOne(id: number) {
+  logout(id: number) {
     return `This action returns a #${id} auth`;
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+  refreshTokens() {
+    return `This action updates a  auth`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
 }
