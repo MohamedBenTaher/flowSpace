@@ -7,6 +7,8 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from './common/guards';
 
 @Module({
   imports: [
@@ -16,6 +18,9 @@ import { ConfigModule } from '@nestjs/config';
       ConfigModule.forRoot({isGlobal: true}),
       AuthModule],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService,{
+    provide:APP_GUARD,
+    useClass:AccessTokenGuard
+  }],
 })
 export class AppModule {}
