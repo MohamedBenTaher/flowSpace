@@ -1,7 +1,13 @@
-function page() {
+import Footer from "@/components/Footer/Footer"
+import Navbar from "@/components/Navbar/Navbar"
+function Homepage() {
   return (
-    <div>page</div>
+    <>
+    <Navbar/>
+     <div className="h-screen">page</div>
+     <Footer />
+    </>
   )
 }
 
-export default page
+export default Homepage
