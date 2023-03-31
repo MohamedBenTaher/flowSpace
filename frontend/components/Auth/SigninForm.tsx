@@ -16,7 +16,7 @@ const LoginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
-const LoginForm = () => {
+const SignInForm = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
   return (
     
@@ -37,10 +37,9 @@ const LoginForm = () => {
         <>
         <Form className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full mx-5 h-max ">
         <div className="flex flex-col justify-start mb-16">
-            <h2 className="font-bold text-text text-4xl">Welcome Back!</h2>
-            <p className="font-ligh mt-3 text-zinc-600">Enter your credentials, to access your account</p>
+            <h2 className="font-bold text-text text-4xl">Get Started with FlowSpace</h2>
+            <p className="font-ligh mt-3 text-zinc-600">Register to create your first account and start exploring the creative community of FlowSpace</p>
         </div>
-        
                   <div className="mb-4">
                       <label
                           htmlFor="email"
@@ -77,7 +76,7 @@ const LoginForm = () => {
                     <span
                         className="absolute inset-y-0 right-0 pr-2 flex items-center cursor-pointer"
                         onClick={() => setPasswordVisible(!passwordVisible)}
-                        style={{bottom:'0%'}}
+                        style={{bottom:errors.password && touched.password ?'30%':'0%'}}
                     >
                         {passwordVisible ?
                         (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -92,19 +91,19 @@ const LoginForm = () => {
                     <ErrorMessage
                           name="password"
                           component="p"
-                          className="text-red-500 text-xs italic" />
+                          className="text-red-500 text-sm" />
                     </div>
                     </div>
-                  <div className="w-full flex items-center justify-end  mb-4 font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'">
+                  {/* <div className="w-full flex items-center justify-end  mb-4 font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'">
                     <Link href={'#'}>Forgot password ?</Link>
-                  </div>
+                  </div> */}
                   <button
                       type="submit"
                       className="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full"
                   >
-                      Login
+                      Sign In
                   </button>
-                  <div className="relative flex py-5 items-center mt-5">
+                  {/* <div className="relative flex py-5 items-center mt-5">
                     <div className="flex-grow border-t border-gray-400"></div>
                     <span className="flex-shrink mx-4 text-gray-400">or</span>
                     <div className="flex-grow border-t border-gray-400"></div>
@@ -112,7 +111,7 @@ const LoginForm = () => {
                   <div className="flex sm:flex-row  flex-col items-center justify-evenly w-full">
                   <button
                       type="submit"
-                      className="flex w-full flex-row md:flex-col lg:flex-row items-center justify-center bg-zinc-100 border border-slate-400 hover:bg-zinc-200 text-text font-bold p-4 rounded-lg sm:w-1/3"
+                      className="flex w-full flex-row md:flex-col lg:flex-row items-center justify-center bg-white border border-slate-400 hover:bg-zinc-200 text-text font-bold p-4 rounded-lg sm:w-1/3"
                   >
                         <Google width={25} height={25}/>
                     <div className="mx-3">
@@ -121,7 +120,7 @@ const LoginForm = () => {
                   </button>
                   <button
                       type="submit"
-                      className="mt-4 sm:mt-0 flex w-full  md:flex-col  flex-row lg:flex-row items-center justify-center bg-zinc-100  border border-slate-400 hover:bg-zinc-200 text-text font-bold p-4 rounded-lg sm:w-1/3"
+                      className="mt-4 sm:mt-0 flex w-full  md:flex-col  flex-row lg:flex-row items-center justify-center bg-white border border-slate-400 hover:bg-zinc-200 text-text font-bold p-4 rounded-lg sm:w-1/3"
                   >
                         <Facebook width={25} height={25}/>
                     <div className="mx-3">
@@ -130,8 +129,8 @@ const LoginForm = () => {
                   </button>
                   </div>
                  <div className="w-full flex items-center justify-center mt-4 mb-4 ">
-                    Not a Member ? <Link href={'#'} className='font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'> SignIn</Link>
-                  </div>
+                   Already have an account ? <Link href={'#'} className='font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'> Login</Link>
+                  </div> */}
 
               </Form></>
       )}
@@ -139,4 +138,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignInForm;
