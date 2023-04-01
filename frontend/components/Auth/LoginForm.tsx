@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import Google from "@/assets/icons/Google";
 import Facebook from "@/assets/icons/Facebook";
+import { LoginDto } from "./dto/login.dto";
 
 
 const LoginSchema = Yup.object().shape({
@@ -15,13 +16,13 @@ const LoginSchema = Yup.object().shape({
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
 });
-
+const initialValues :LoginDto ={ email: "", password: "" }
 const LoginForm = () => {
-    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(true);
   return (
     
     <Formik
-      initialValues={{ email: "", password: "" }}
+      initialValues={initialValues}
       validationSchema={LoginSchema}
       onSubmit={async (values) => {
         await fetch('http://localhost:5000/auth/local/signin',{
@@ -48,16 +49,27 @@ const LoginForm = () => {
                       >
                           Email Address
                       </label>
+                      <div className="relative">
                       <Field
                           type="email"
                           id="email"
                           name="email"
                           placeholder="Enter your email"
-                          className={`${errors.email && touched.email ? "border-red-500" : ""} appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`} />
+                          className={`${errors.email && touched.email ? "border-red-500 border-2" : ""} appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+                          style={{ paddingLeft: "2.5rem" }} />
+                       <span
+                        className="absolute inset-y-0 left-0 pl-2 flex items-center cursor-pointer"
+                        style={{bottom:'0%'}}
+                    >
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                       <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                    </svg>
+                    </span>
+                    </div>
                       <ErrorMessage
                           name="email"
                           component="p"
-                          className="text-red-500 text-sm " />
+                          className="text-red-500 text-sm font-normal " />
                   </div>
                   <div className="mb-4">
                       <label
@@ -71,13 +83,13 @@ const LoginForm = () => {
                         name="password"
                         type={passwordVisible ? "text" : "password"}
                         placeholder="Password"
-                        className={`${errors.password && touched.password ? "border-red-500" : ""} w-full border p-2 rounded-lg focus:outline-none  `}
-                        style={{ paddingRight: "2.5rem" }} // add some padding on the right to make space for the eye icon
+                        className={`${errors.password && touched.password ? "border-red-500 border-2" : ""} w-full border p-2 rounded-lg focus:outline-none  `}
+                        style={{ paddingRight: "2.5rem" ,paddingLeft: "2.5rem"}} // add some padding on the right to make space for the eye icon
                     />
                     <span
                         className="absolute inset-y-0 right-0 pr-2 flex items-center cursor-pointer"
                         onClick={() => setPasswordVisible(!passwordVisible)}
-                        style={{bottom:'0%'}}
+                        style={{bottom:errors.password && touched.password ? '25%':'0%'}}
                     >
                         {passwordVisible ?
                         (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -89,10 +101,19 @@ const LoginForm = () => {
                         </svg>
                          }
                     </span>
+                    <span
+                        className="absolute inset-y-0 left-0 pl-2 flex items-center cursor-pointer"
+                        style={{bottom:errors.password && touched.password ? '25%':'0%'}}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                      </svg>
+
+                    </span>
                     <ErrorMessage
                           name="password"
                           component="p"
-                          className="text-red-500 text-xs italic" />
+                          className="text-red-500 text-sm font-normal " />
                     </div>
                     </div>
                   <div className="w-full flex items-center justify-end  mb-4 font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'">
