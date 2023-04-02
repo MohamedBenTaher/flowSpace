@@ -7,7 +7,7 @@ import { countries } from "@/utils/countries-list";
 import Link from "next/link";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-const LoginSchema = Yup.object().shape({
+const SigninSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
@@ -45,19 +45,21 @@ const SignInForm = () => {
         }
         return error;
       };
-    const initialValues:SignInDto={ email: "", password: "" ,firstName:"",lastName:"",userName:"",birthday:new Date(),phoneNumber:'',confirmPassword:'',gender:''}
+    const initialValues:SignInDto={ email: "", password: "" ,firstName:"",lastName:"",userName:"",birthday:new Date(),confirmPassword:'',gender:''}
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={LoginSchema}
+      // validationSchema={SigninSchema}
       onSubmit={async (values) => {
-        console.log('rqached')
-        await fetch('http://localhost:5000/auth/local/signin',{
+        const payload:SignInDto= values;
+        delete payload.confirmPassword
+        console.log('reached', payload)
+        await fetch('http://localhost:5000/auth/local/register',{
           method:'POST',
           headers:{
             'Content-Type':'application/json'
           },
-          body:JSON.stringify(values)
+          body:JSON.stringify(payload)
         })
       }}
     >
