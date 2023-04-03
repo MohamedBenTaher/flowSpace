@@ -83,9 +83,11 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   hash: string;
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   hashRt: string;
 }

@@ -4,7 +4,7 @@ import SignInForm from '@/components/Auth/SigninForm'
 import React ,{useState} from 'react'
 
 const Auth = () => {
-    const [isMember,setIsMember]=useState(false)
+    const [isMember,setIsMember]=React.useState<boolean>(false)
   return (
     <div className='w-full flex items-center justify-around flex-col sm:flex-row px-10'>
      <div className=' lg:w-1/2 sm:w-full bg-red-600  h-1/2 sm:h-screen'>
@@ -14,9 +14,9 @@ const Auth = () => {
     <div>
     </div>
     {isMember ?
-     <LoginForm />
+     <LoginForm setIsMember={setIsMember}/>
      :
-     <SignInForm/>
+     <SignInForm setIsMember={setIsMember}/>
     }
      </div>
     </div>

@@ -1,13 +1,15 @@
 'use client'
-import React,{useState} from "react";
+import React,{SetStateAction, useState} from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import Google from "@/assets/icons/Google";
 import Facebook from "@/assets/icons/Facebook";
 import { LoginDto } from "./dto/login.dto";
-
-
+import { Dispatch } from "react";
+type LoginFormProps = {
+  setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
+};
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
@@ -17,14 +19,15 @@ const LoginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 const initialValues :LoginDto ={ email: "", password: "" }
-const LoginForm = () => {
+const LoginForm = ({ setIsMember }: LoginFormProps) => {
     const [passwordVisible, setPasswordVisible] = useState(true);
   return (
     
     <Formik
       initialValues={initialValues}
       validationSchema={LoginSchema}
-      onSubmit={async (values) => {
+      onSubmit={async (values) => { 
+        console.log('reached login ',values)
         await fetch('http://localhost:5000/auth/local/signin',{
           method:'POST',
           headers:{
@@ -151,7 +154,7 @@ const LoginForm = () => {
                   </button>
                   </div>
                  <div className="w-full flex items-center justify-center mt-4 mb-4 ">
-                    Not a Member ? <Link href={'#'} className='font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'> SignIn</Link>
+                    Not a Member ? <a onClick={()=>setIsMember((prev)=>!prev)} className='font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'> SignIn</a>
                   </div>
 
               </Form></>

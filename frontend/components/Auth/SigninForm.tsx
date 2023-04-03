@@ -1,12 +1,18 @@
 'use client'
-import React,{useState} from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React,{useState,SetStateAction} from "react";
+import { Formik, Form, Field, ErrorMessage,FieldInputProps,FieldMetaProps,FieldProps, FormikProps} from "formik";
 import * as Yup from "yup";
 import { SignInDto } from "./dto/signIn.dto";
 import { countries } from "@/utils/countries-list";
 import Link from "next/link";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Dispatch } from "react";
+
+type SignInFormProps = {
+  setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 const SigninSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
@@ -32,7 +38,7 @@ const SigninSchema = Yup.object().shape({
     .oneOf(['male','female'])
 });
 
-const SignInForm = () => {
+const SignInForm = ({ setIsMember }: SignInFormProps) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const validateConfirmPassword = (pass:string, value:string) => {
@@ -50,7 +56,7 @@ const SignInForm = () => {
     <Formik
       initialValues={initialValues}
       // validationSchema={SigninSchema}
-      onSubmit={async (values) => {
+      onSubmit={async (values :SignInDto) => {
         const payload:SignInDto= values;
         delete payload.confirmPassword
         console.log('reached', payload)
@@ -63,7 +69,7 @@ const SignInForm = () => {
         })
       }}
     >
-      {({ errors, touched,values }) => (
+      {({ errors , touched,values }) => (
         <>
         <Form className="transition ease-in-out delay-150 bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full mx-5 h-max ">
         <div className="flex flex-col justify-start mb-16">
@@ -191,7 +197,7 @@ const SignInForm = () => {
                   <div className="mb-4">
                       <div className="relative">
                 <Field name="birthday" style={{ paddingLeft: "2.5rem" }} >
-                    {({ field , form, meta }) => (
+                    {({ field ,form ,meta }:FieldProps) => (
                         <div className="mb-4">
                         <label htmlFor="birthday" className="block text-gray-700 font-bold mb-2">
                             Birthdate
@@ -355,7 +361,7 @@ const SignInForm = () => {
                       Sign In
                   </button>
                  <div className="w-full flex items-center justify-center mt-4 mb-4 ">
-                   Already have an account ? <Link href={'#'} className='font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'> Login</Link>
+                   Already have an account ? <a onClick={()=>setIsMember((prev)=>!prev)} className='font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'> Login</a>
                   </div>
 
               </Form></>

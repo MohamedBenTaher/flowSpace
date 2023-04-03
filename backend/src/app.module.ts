@@ -12,15 +12,20 @@ import { AccessTokenGuard } from './common/guards';
 
 @Module({
   imports: [
-      PrismaModule
-    , UserModule
-    , PostModule,
-      ConfigModule.forRoot({isGlobal: true}),
-      AuthModule],
+    PrismaModule,
+    UserModule,
+    PostModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
+  ],
   controllers: [AppController],
-  providers: [AppService, PrismaService,{
-    provide:APP_GUARD,
-    useClass:AccessTokenGuard
-  }],
+  providers: [
+    AppService,
+    PrismaService,
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
+  ],
 })
 export class AppModule {}
