@@ -106,7 +106,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
                           className="text-red-500 text-sm font-normal " />
                   </div>
                   <div className="flex flex-col sm:flex-row items-center justify-between">
-                  <div className="mb-4  w-3/4 mr-4">
+                  <div className="mb-4  sm:w-3/4 sm:mr-4 w-full">
                       <label
                           htmlFor="email"
                           className="block text-text font-bold mb-2"
@@ -135,7 +135,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
                           component="p"
                           className="text-red-500 text-sm font-normal " />
                   </div>
-                  <div className="mb-4 w-3/4 ml-4">
+                  <div className="mb-4 sm:w-3/4 sm:ml-4 w-full">
                       <label
                           htmlFor="email"
                           className="block text-text font-bold mb-2"
@@ -341,7 +341,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
                     </span>
                     <span
                         className="absolute inset-y-0 left-0 pl-2 flex items-center cursor-pointer"
-                        style={{bottom:errors.password && touched.password ? '25%':'0%'}}
+                        style={{bottom:errors.confirmPassword && touched.confirmPassword ? '25%':'0%'}}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                          <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />

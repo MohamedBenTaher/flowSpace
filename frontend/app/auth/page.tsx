@@ -5,6 +5,7 @@ import React ,{useState} from 'react'
 
 const Auth = () => {
     const [isMember,setIsMember]=React.useState<boolean>(false)
+    console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
   return (
     <div className='w-full flex items-center justify-around flex-col sm:flex-row px-10'>
      <div className=' lg:w-1/2 sm:w-full bg-red-600  h-1/2 sm:h-screen'>

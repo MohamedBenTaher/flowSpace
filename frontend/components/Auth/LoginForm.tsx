@@ -1,15 +1,16 @@
 'use client'
-import React,{SetStateAction, useState} from "react";
+import React,{ useState} from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import Google from "@/assets/icons/Google";
 import Facebook from "@/assets/icons/Facebook";
 import { LoginDto } from "./dto/login.dto";
-import { Dispatch } from "react";
+import { useRouter } from 'next/navigation';
 type LoginFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
 };
+// redirecet in nextjs
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
@@ -20,7 +21,9 @@ const LoginSchema = Yup.object().shape({
 });
 const initialValues :LoginDto ={ email: "", password: "" }
 const LoginForm = ({ setIsMember }: LoginFormProps) => {
+    const router = useRouter();
     const [passwordVisible, setPasswordVisible] = useState(true);
+    console.log('in component',process.env.NEXT_PUBLIC_BACKEND_URL)
   return (
     
     <Formik
@@ -28,14 +31,15 @@ const LoginForm = ({ setIsMember }: LoginFormProps) => {
       validationSchema={LoginSchema}
       onSubmit={async (values) => { 
         console.log('reached login ',values)
-        await fetch('http://localhost:5000/auth/local/signin',{
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/signin`,{
           method:'POST',
           headers:{
             'Content-Type':'application/json'
           },
           body:JSON.stringify(values)
-        }).then((response)=>{
-          console.log(response.json())
+        }).then( async(response)=>{
+          console.log( await response.json())
+          router.push('/home');
         }).catch((error)=>{
           console.log(error)
         })
@@ -169,3 +173,4 @@ const LoginForm = ({ setIsMember }: LoginFormProps) => {
 };
 
 export default LoginForm;
+ 
