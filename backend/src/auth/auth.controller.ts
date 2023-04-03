@@ -18,6 +18,7 @@ export class AuthController {
   register(@Body() authDto:CreateUserDto):Promise<Tokens>{
     return this.authService.register(authDto)
   }
+  
   @Public()
   @Post('/local/signin')
   @HttpCode(HttpStatus.OK)

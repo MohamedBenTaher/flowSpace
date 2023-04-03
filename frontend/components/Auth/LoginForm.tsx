@@ -34,6 +34,10 @@ const LoginForm = ({ setIsMember }: LoginFormProps) => {
             'Content-Type':'application/json'
           },
           body:JSON.stringify(values)
+        }).then((response)=>{
+          console.log(response.json())
+        }).catch((error)=>{
+          console.log(error)
         })
       }}
     >
@@ -137,6 +141,7 @@ const LoginForm = ({ setIsMember }: LoginFormProps) => {
                   <button
                       type="submit"
                       className="flex w-full flex-row md:flex-col lg:flex-row items-center justify-center bg-zinc-100 border border-slate-400 hover:bg-zinc-200 text-text font-bold p-4 rounded-lg sm:w-1/3"
+                      
                   >
                         <Google width={25} height={25}/>
                     <div className="mx-3">
