@@ -31,7 +31,7 @@ const LoginForm = ({ setIsMember }: LoginFormProps) => {
       validationSchema={LoginSchema}
       onSubmit={async (values) => { 
         console.log('reached login ',values)
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/signin`,{
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/login`,{
           method:'POST',
           headers:{
             'Content-Type':'application/json'

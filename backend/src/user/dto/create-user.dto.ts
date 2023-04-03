@@ -9,6 +9,7 @@ import {
   IsEmail,
   IsDate,
   IsEnum,
+  isNotEmpty,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -70,6 +71,11 @@ export class CreateUserDto {
   gender: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsEnum([1, 2])
+  statusId: number;
+
+  @ApiProperty()
   @IsOptional()
   @Type(() => Date)
   @IsDate()
@@ -90,4 +96,9 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   hashRt: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  confirmHash: string;
 }

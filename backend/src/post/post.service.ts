@@ -23,7 +23,7 @@ export class PostService {
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
-    return this.prisma.user.update({
+    return this.prisma.post.update({
       where: { id },
       data: updatePostDto,
     });

@@ -9,6 +9,7 @@ import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './common/guards';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AccessTokenGuard } from './common/guards';
     PostModule,
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [

@@ -60,7 +60,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
         const payload:SignInDto= values;
         delete payload.confirmPassword
         console.log('reached', payload)
-        await fetch('http://localhost:5000/auth/local/register',{
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/register`,{
           method:'POST',
           headers:{
             'Content-Type':'application/json'

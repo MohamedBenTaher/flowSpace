@@ -1,12 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,ParseIntPipe, HttpCode, HttpStatus,UseGuards ,Req} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { getCurrentUser, getCurrentUserId, Public } from 'src/common/decorators';
+import {
+  getCurrentUser,
+  getCurrentUserId,
+  Public,
+} from 'src/common/decorators';
 import { AccessTokenGuard, RefreshTokenGuard } from 'src/common/guards';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { loginDto } from './dto/login.dto';
 import { Tokens } from './types';
-
 
 @Controller('auth')
 export class AuthController {
@@ -15,30 +31,37 @@ export class AuthController {
   @Public()
   @Post('/local/register')
   @HttpCode(HttpStatus.CREATED)
-  register(@Body() authDto:CreateUserDto):Promise<Tokens>{
-    return this.authService.register(authDto)
+  register(@Body() authDto: CreateUserDto): Promise<Tokens> {
+    return this.authService.register(authDto);
   }
-  
+
   @Public()
-  @Post('/local/signin')
+  @Post('/local/login')
   @HttpCode(HttpStatus.OK)
-  signInLocal(@Body() authDto:loginDto):Promise<Tokens>{
+  signInLocal(@Body() authDto: loginDto): Promise<Tokens> {
     {
-      return this.authService.signInLocal(authDto)
+      return this.authService.signInLocal(authDto);
     }
   }
 
   @ApiBearerAuth()
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  logout (@getCurrentUserId() userId:number){
-    return this.authService.logout(userId)
+  logout(@getCurrentUserId() userId: number) {
+    return this.authService.logout(userId);
   }
 
   @ApiBearerAuth()
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
-  refreshTokens(@getCurrentUserId() userId:number,@getCurrentUser('refreshToken') refreshToken:string,){
-    return this.authService.refreshTokens(userId,refreshToken)
+  refreshTokens(
+    @getCurrentUserId() userId: number,
+    @getCurrentUser('refreshToken') refreshToken: string,
+  ) {
+    return this.authService.refreshTokens(userId, refreshToken);
   }
+
+  @Post('email/confirm')
+  @HttpCode(HttpStatus.FOUND)
+  async confirmEmail() {}
 }

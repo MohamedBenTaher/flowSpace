@@ -10,22 +10,25 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  userName  String   @unique
-  firstName String
-  lastName  String
-  bio       String?
-  birthday  DateTime
-  email     String   @unique
-  country   String?
-  city      String?
-  password  String
-  gender    String
-  posts     Post[]
-  hash      String
-  hashRt    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  userName    String   @unique
+  firstName   String
+  lastName    String
+  bio         String?
+  birthday    DateTime
+  email       String   @unique
+  country     String?
+  city        String?
+  password    String
+  gender      String
+  posts       Post[]
+  hash        String
+  hashRt      String?
+  confirmHash String?
+  status      Status   @relation(fields: [statusId], references: [id])
+  statusId    Int      @default(2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Post {
@@ -35,4 +38,10 @@ model Post {
   published Boolean? @default(false)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
+}
+
+model Status {
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[]
 }
