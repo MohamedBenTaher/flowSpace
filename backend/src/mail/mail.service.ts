@@ -1,57 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMailDto } from './dto/create-mail.dto';
-import { UpdateMailDto } from './dto/update-mail.dto';
 import { MailerService } from '@nestjs-modules/mailer';
-import { ConfigService } from '@nestjs/config';
-import { MailData } from './interfaces/mail-data.interface';
+import { Injectable } from '@nestjs/common';
+
 @Injectable()
 export class MailService {
-  constructor(
-    private mailerService: MailerService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private mailerService: MailerService) {}
 
-  async userSignUp(mailData: MailData<{ hash: string }>) {
-    await this.mailerService.sendMail({
-      to: mailData.to,
-      subject: 'common.confirmEmail',
-      text: `${this.configService.get('app.frontendDomain')}/confirm-email/${
-        mailData.data.hash
-      } ${'common.confirmEmail'}`,
-      template: 'activation',
-      context: {
-        title: 'common.confirmEmail',
-        url: `${this.configService.get('app.frontendDomain')}/confirm-email/${
-          mailData.data.hash
-        }`,
-        actionTitle: 'common.confirmEmail',
-        app_name: this.configService.get('app.name'),
-        text1: 'confirm-email.text1',
-        text2: 'confirm-email.text2',
-        text3: 'confirm-email.text3',
-      },
-    });
-  }
+  async sendUserConfirmation(name: string, email: string, token: string) {
+    const url = `example.com/auth/confirm?token=${token}`;
 
-  async forgotPassword(mailData: MailData<{ hash: string }>) {
     await this.mailerService.sendMail({
-      to: mailData.to,
-      subject: 'common.resetPassword',
-      text: `${this.configService.get('app.frontendDomain')}/password-change/${
-        mailData.data.hash
-      } {'common.resetPassword')}`,
-      template: 'reset-password',
+      to: email,
+      // from: '"Support Team" <support@example.com>', // override default from
+      subject: 'Welcome to Nice App! Confirm your Email',
+      template: './confirmation', // `.hbs` extension is appended automatically
       context: {
-        title: 'common.resetPassword',
-        url: `${this.configService.get('app.frontendDomain')}/password-change/${
-          mailData.data.hash
-        }`,
-        actionTitle: 'common.resetPassword',
-        app_name: this.configService.get('app.name'),
-        text1: 'reset-password.text1',
-        text2: 'reset-password.text2',
-        text3: 'reset-password.text3',
-        text4: 'reset-password.text4',
+        // ✏️ filling curly brackets with content
+        name: name,
+        url,
       },
     });
   }
