@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -9,12 +14,14 @@ import { JwtService } from '@nestjs/jwt/dist';
 import { loginDto } from './dto/login.dto';
 import * as crypto from 'crypto';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async register(authDto: CreateUserDto): Promise<Tokens> {
@@ -27,6 +34,12 @@ export class AuthService {
       .digest('hex');
     authDto.confirmHash = confirmHash;
     const newUser = await this.prisma.user.create({ data: authDto });
+    await this.mailService.userSignUp({
+      to: authDto.email,
+      data: {
+        hash: confirmHash,
+      },
+    });
     const tokens = await this.getTokens(newUser.id, newUser.email);
     await this.updateRefreshTokenHash(newUser.id, tokens.refresh_token);
     return tokens;
@@ -76,6 +89,24 @@ export class AuthService {
     const user = await this.prisma.user.findFirstOrThrow({
       where: {
         confirmHash: hash,
+      },
+    });
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `notFound`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        confirmHash: null,
+        statusId: 1,
       },
     });
   }

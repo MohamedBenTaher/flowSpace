@@ -1,22 +1,28 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-
+import { MailData } from './interfaces/mail-data.inteface';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(
+    private mailerService: MailerService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  async sendUserConfirmation(name: string, email: string, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
+  async userSignUp(mailData: MailData<{ hash: string }>) {
+    const url = `example.com/auth/confirm?token=${mailData.data}`;
 
     await this.mailerService.sendMail({
-      to: email,
+      to: mailData.to,
       // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Welcome to Nice App! Confirm your Email',
+      subject: 'Weclome to FLowSpace!, confirm your Email',
       template: './confirmation', // `.hbs` extension is appended automatically
       context: {
         // ✏️ filling curly brackets with content
-        name: name,
-        url,
+        name: mailData.data,
+        url: `https://${this.configService.get(
+          'FRONTEND_DOMAIN',
+        )}/confirm-email/${mailData.data.hash}`,
       },
     });
   }

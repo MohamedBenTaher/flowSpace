@@ -11,7 +11,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './common/guards';
 import { MailModule } from './mail/mail.module';
 import { MailService } from './mail/mail.service';
-import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
