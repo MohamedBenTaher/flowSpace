@@ -9,7 +9,7 @@ export class MailService {
     private readonly configService: ConfigService,
   ) {}
 
-  async userSignUp(mailData: MailData<{ hash: string }>) {
+  async userSignUp(mailData: MailData<{ hash: string; username: string }>) {
     const url = `example.com/auth/confirm?token=${mailData.data}`;
 
     await this.mailerService.sendMail({
@@ -19,10 +19,10 @@ export class MailService {
       template: './confirmation', // `.hbs` extension is appended automatically
       context: {
         // ✏️ filling curly brackets with content
-        name: mailData.data,
-        url: `https://${this.configService.get(
-          'FRONTEND_DOMAIN',
-        )}/confirm-email/${mailData.data.hash}`,
+        name: mailData.data.username,
+        url: `${this.configService.get('FRONTEND_DOMAIN')}/confirm-email/${
+          mailData.data.hash
+        }`,
       },
     });
   }

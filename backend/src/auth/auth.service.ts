@@ -15,6 +15,7 @@ import { loginDto } from './dto/login.dto';
 import * as crypto from 'crypto';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { MailService } from 'src/mail/mail.service';
+import { confirmEmailDto } from './dto/auth-confirm-email.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,6 +39,7 @@ export class AuthService {
       to: authDto.email,
       data: {
         hash: confirmHash,
+        username: authDto.userName,
       },
     });
     const tokens = await this.getTokens(newUser.id, newUser.email);
@@ -45,11 +47,12 @@ export class AuthService {
     return tokens;
   }
   async signInLocal(authDto: loginDto) {
-    const user = await this.prisma.user.findUniqueOrThrow({
+    const user = await this.prisma.user.findUnique({
       where: {
         email: authDto.email,
       },
     });
+    if (!user) throw new ForbiddenException('Access Denied');
     const passwordMatches = await bcrypt.compare(authDto.password, user.hash);
     if (!passwordMatches) throw new ForbiddenException('Wrong Password');
     const tokens = await this.getTokens(user.id, user.email);
@@ -77,7 +80,6 @@ export class AuthService {
         id: userId,
       },
     });
-    if (!user || !user.hashRt) throw new ForbiddenException('Access Denied');
     const rtMatches = bcrypt.compare(user.hashRt, refreshToken);
     if (!rtMatches) throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(user.id, user.email);
@@ -85,10 +87,10 @@ export class AuthService {
     return tokens;
   }
 
-  async confirmEmail(hash: string) {
+  async confirmEmail(hash: confirmEmailDto) {
     const user = await this.prisma.user.findFirstOrThrow({
       where: {
-        confirmHash: hash,
+        confirmHash: hash.hash,
       },
     });
     if (!user) {

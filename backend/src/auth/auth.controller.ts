@@ -23,6 +23,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { loginDto } from './dto/login.dto';
 import { Tokens } from './types';
+import { confirmEmailDto } from './dto/auth-confirm-email.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -60,8 +61,11 @@ export class AuthController {
   ) {
     return this.authService.refreshTokens(userId, refreshToken);
   }
-
+  @Public()
   @Post('email/confirm')
   @HttpCode(HttpStatus.FOUND)
-  async confirmEmail() {}
+  async confirmEmail(@Body() token: confirmEmailDto) {
+    console.log(token);
+    return this.authService.confirmEmail(token);
+  }
 }
