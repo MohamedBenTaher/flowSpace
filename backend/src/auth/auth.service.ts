@@ -47,12 +47,11 @@ export class AuthService {
     return tokens;
   }
   async signInLocal(authDto: loginDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUniqueOrThrow({
       where: {
         email: authDto.email,
       },
     });
-    if (!user) throw new ForbiddenException('Access Denied');
     const passwordMatches = await bcrypt.compare(authDto.password, user.hash);
     if (!passwordMatches) throw new ForbiddenException('Wrong Password');
     const tokens = await this.getTokens(user.id, user.email);
@@ -80,6 +79,7 @@ export class AuthService {
         id: userId,
       },
     });
+    if (!user || !user.hashRt) throw new ForbiddenException('Access Denied');
     const rtMatches = bcrypt.compare(user.hashRt, refreshToken);
     if (!rtMatches) throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(user.id, user.email);

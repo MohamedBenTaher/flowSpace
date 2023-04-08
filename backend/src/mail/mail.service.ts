@@ -20,7 +20,7 @@ export class MailService {
       context: {
         // ✏️ filling curly brackets with content
         name: mailData.data.username,
-        url: `${this.configService.get('FRONTEND_DOMAIN')}/confirm-email/${
+        url: `${this.configService.get('FRONTEND_DOMAIN')}/auth/confirm/${
           mailData.data.hash
         }`,
       },

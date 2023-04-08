@@ -73,7 +73,7 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum([1, 2])
-  statusId: number;
+  statusId?: number = 2;
 
   @ApiProperty()
   @IsOptional()

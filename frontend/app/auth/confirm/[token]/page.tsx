@@ -26,7 +26,7 @@ export default function ConfirmationPage({ params }: Props): JSX.Element {
 
         if (response.ok) {
           console.log(await response.json());
-          router.push('/home')
+          router.push('/auth?confirmed=true')
         } else {
           console.log(`Server responded with ${response.status} status code`);
         }

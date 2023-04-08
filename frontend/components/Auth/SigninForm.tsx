@@ -41,6 +41,7 @@ const SigninSchema = Yup.object().shape({
 const SignInForm = ({ setIsMember }: SignInFormProps) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+    const [sumbitted,setSubmitted]=useState(false)
     const validateConfirmPassword = (pass:string, value:string) => {
 
         let error = "";
@@ -53,6 +54,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
       };
     const initialValues:SignInDto={ email: "", password: "" ,firstName:"",lastName:"",userName:"",birthday:new Date(),confirmPassword:'',gender:''}
   return (
+    !sumbitted ?(
     <Formik
       initialValues={initialValues}
       // validationSchema={SigninSchema}
@@ -67,9 +69,15 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
           },
           body:JSON.stringify(payload)
         })
+        .then(()=>{
+          setSubmitted(true)
+        })
+        .catch((error)=>{
+          console.log('error at Signin ',error.message)
+        })
       }}
     >
-      {({ errors , touched,values }) => (
+      {({ errors , touched,values ,isSubmitting}) => (
         <>
         <Form className="transition ease-in-out delay-150 bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full mx-5 h-max ">
         <div className="flex flex-col justify-start mb-16">
@@ -356,6 +364,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
                     </div>
                   <button
                       type="submit"
+                      disabled={isSubmitting}
                       className="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full"
                   >
                       Sign In
@@ -367,7 +376,11 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
               </Form></>
       )}
     </Formik>
-  );
+  ):(
+    <div className="transition ease-in-out delay-150 bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full mx-5 h-max ">
+      Account created Checkout your Email to activate your account 
+    </div>
+   ) );
 };
 
 export default SignInForm;
