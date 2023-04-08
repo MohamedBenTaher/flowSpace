@@ -102,7 +102,7 @@ export class AuthService {
         HttpStatus.NOT_FOUND,
       );
     }
-    await this.prisma.user.update({
+    return await this.prisma.user.update({
       where: {
         id: user.id,
       },
