@@ -63,7 +63,7 @@ export class AuthController {
   }
   @Public()
   @Post('email/confirm')
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   async confirmEmail(@Body() token: confirmEmailDto) {
     console.log(token);
     return this.authService.confirmEmail(token);

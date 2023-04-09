@@ -2,20 +2,24 @@
 import LoginForm from '@/components/Auth/LoginForm'
 import SignInForm from '@/components/Auth/SigninForm'
 import React ,{useState} from 'react'
-
+import { useSearchParams } from 'next/navigation';
 const Auth = () => {
-    const [isMember,setIsMember]=React.useState<boolean>(false)
+    const searchParams = useSearchParams();
+    const search = searchParams.get('confirmed');
+    const [isMember,setIsMember]=React.useState<boolean>(search ? true :false)
     console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
   return (
     <div className='w-full flex items-center justify-around flex-col sm:flex-row px-10'>
-     <div className=' lg:w-1/2 sm:w-full bg-red-600  h-1/2 sm:h-screen'>
-        hello
+     <div className=' lg:w-1/2 sm:w-full h-1/2 sm:h-screen p-3 flex items-center flex-col '>
+      <div className="w-full h-60 font-bold text-lg font-sans mt-5 text-left flex justify-start ">FlowSpace</div>
+      <div className=" h-full font-bold text-4xl font-sans flex justify-start items-center ">Get it in the flow improve yourself and join a community of creatives and masters</div>
      </div>
-     <div className='flex flex-wrap items-center justify-center lg:w-1/2 sm:w-full bg-green-400 h-1/2 sm:h-screen'>
+     {/* bg image and illustration to be added */}
+     <div className='flex flex-wrap items-center justify-center lg:w-1/2 sm:w-full  h-1/2 sm:h-screen'>
     <div>
     </div>
     {isMember ?
-     <LoginForm setIsMember={setIsMember}/>
+     <LoginForm setIsMember={setIsMember} confirmed={search}/>
      :
      <SignInForm setIsMember={setIsMember}/>
     }

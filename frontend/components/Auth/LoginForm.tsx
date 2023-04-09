@@ -7,8 +7,11 @@ import Google from "@/assets/icons/Google";
 import Facebook from "@/assets/icons/Facebook";
 import { LoginDto } from "./dto/login.dto";
 import { useRouter } from 'next/navigation';
+import LocalStorageService from "@/services/localStorage/LocalStorageService";
+
 type LoginFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
+  confirmed:string|boolean|null
 };
 // redirecet in nextjs
 const LoginSchema = Yup.object().shape({
@@ -20,7 +23,8 @@ const LoginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 const initialValues :LoginDto ={ email: "", password: "" }
-const LoginForm = ({ setIsMember }: LoginFormProps) => {
+const LoginForm = ({ setIsMember,confirmed }: LoginFormProps) => {
+   const storage = new LocalStorageService();
     const router = useRouter();
     const [passwordVisible, setPasswordVisible] = useState(true);
     console.log('in component',process.env.NEXT_PUBLIC_BACKEND_URL)
@@ -39,6 +43,10 @@ const LoginForm = ({ setIsMember }: LoginFormProps) => {
           body:JSON.stringify(values)
         }).then( async(response)=>{
           console.log( await response.json())
+          const tokens =await response.json()
+          console.log('tokens',tokens)
+          storage.setItem('access_token',tokens.access_token)
+          storage.setItem('refresh_token',tokens.refresh_token)
           router.push('/home');
         }).catch((error)=>{
           console.log(error)
@@ -52,7 +60,11 @@ const LoginForm = ({ setIsMember }: LoginFormProps) => {
             <h2 className="font-bold text-text text-4xl">Welcome Back!</h2>
             <p className="font-ligh mt-3 text-zinc-600">Enter your credentials, to access your account</p>
         </div>
-        
+        {confirmed?(
+          <div className="rounded-lg bg-green-500 text-slate-50 shadow-md w-full h-12 p-2 mb-10">Account Confirmed Successfully , welcome &#127881; &#127881;</div>
+        ):(
+          null
+        )}
                   <div className="mb-4">
                       <label
                           htmlFor="email"

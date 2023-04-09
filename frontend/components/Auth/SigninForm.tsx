@@ -79,7 +79,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
     >
       {({ errors , touched,values ,isSubmitting}) => (
         <>
-        <Form className="transition ease-in-out delay-150 bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full mx-5 h-max ">
+        <Form className="transition ease-in-out delay-150 bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full mx-5 h-max m-4">
         <div className="flex flex-col justify-start mb-16">
             <h2 className="font-bold text-text text-4xl">Get Started with FlowSpace</h2>
             <p className="font-ligh mt-3 text-zinc-600">Register to create your first account and start exploring the creative community of FlowSpace</p>
@@ -377,8 +377,8 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
       )}
     </Formik>
   ):(
-    <div className="transition ease-in-out delay-150 bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full mx-5 h-max ">
-      Account created Checkout your Email to activate your account 
+    <div className="flex items-center justify-center bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full mx-5 h-screen ">
+     <div className="text-2xl text-center"> Account created Checkout your Email to activate your account </div>
     </div>
    ) );
 };
