@@ -10,8 +10,6 @@ export class MailService {
   ) {}
 
   async userSignUp(mailData: MailData<{ hash: string; username: string }>) {
-    const url = `example.com/auth/confirm?token=${mailData.data}`;
-
     await this.mailerService.sendMail({
       to: mailData.to,
       // from: '"Support Team" <support@example.com>', // override default from
@@ -21,6 +19,21 @@ export class MailService {
         // ✏️ filling curly brackets with content
         name: mailData.data.username,
         url: `${this.configService.get('FRONTEND_DOMAIN')}/auth/confirm/${
+          mailData.data.hash
+        }`,
+      },
+    });
+  }
+  async userForgot(mailData: MailData<{ hash: string; username: string }>) {
+    await this.mailerService.sendMail({
+      to: mailData.to,
+      // from: '"Support Team" <support@example.com>', // override default from
+      subject: 'FlowSpace:Forgot Password',
+      template: './forgot', // `.hbs` extension is appended automatically
+      context: {
+        // ✏️ filling curly brackets with content
+        name: mailData.data.username,
+        url: `${this.configService.get('FRONTEND_DOMAIN')}/auth/reset/${
           mailData.data.hash
         }`,
       },

@@ -16,6 +16,7 @@ import * as crypto from 'crypto';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { MailService } from 'src/mail/mail.service';
 import { confirmEmailDto } from './dto/auth-confirm-email.dto';
+import { forgotPasswordDto } from './dto/forgot-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -112,6 +113,47 @@ export class AuthService {
       },
     });
   }
+  async forgotPassword(email: forgotPasswordDto) {
+    const user = await this.prisma.user.findFirstOrThrow({
+      where: {
+        email: email.email,
+      },
+    });
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            email: 'emailNotExists',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    } else {
+      const confirmHash = crypto
+        .createHash('sha256')
+        .update(randomStringGenerator())
+        .digest('hex');
+      await this.prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          hash: undefined,
+          confirmHash: confirmHash,
+          statusId: 2,
+        },
+      });
+      return this.mailService.userForgot({
+        to: user.email,
+        data: {
+          hash: confirmHash,
+          username: user.userName,
+        },
+      });
+    }
+  }
+  async resetPassword() {}
 
   // utils functions to be placed in a utils folder later
   async updateRefreshTokenHash(userId: number, refreshToken: string) {

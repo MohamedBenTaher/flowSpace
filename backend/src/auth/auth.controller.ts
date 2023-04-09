@@ -24,6 +24,7 @@ import { AuthService } from './auth.service';
 import { loginDto } from './dto/login.dto';
 import { Tokens } from './types';
 import { confirmEmailDto } from './dto/auth-confirm-email.dto';
+import { forgotPasswordDto } from './dto/forgot-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -65,7 +66,12 @@ export class AuthController {
   @Post('email/confirm')
   @HttpCode(HttpStatus.OK)
   async confirmEmail(@Body() token: confirmEmailDto) {
-    console.log(token);
     return this.authService.confirmEmail(token);
+  }
+  @Public()
+  @Post('/email/forgot')
+  @HttpCode(HttpStatus.OK)
+  forgotPassword(@Body() email: forgotPasswordDto) {
+    return this.authService.forgotPassword(email);
   }
 }
