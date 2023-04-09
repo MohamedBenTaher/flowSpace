@@ -57,7 +57,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
     !sumbitted ?(
     <Formik
       initialValues={initialValues}
-      // validationSchema={SigninSchema}
+      validationSchema={SigninSchema}
       onSubmit={async (values :SignInDto) => {
         const payload:SignInDto= values;
         delete payload.confirmPassword
@@ -94,7 +94,7 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
                       <div className="relative">
                       <Field
                           type="input"
-                          id="username"
+                          id="userName"
                           name="userName"
                           placeholder="Enter your username"
                           className={`${errors.userName && touched.userName ? "border-red-500 border-2" : ""} appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
