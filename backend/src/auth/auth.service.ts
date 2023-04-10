@@ -17,6 +17,7 @@ import { randomStringGenerator } from '@nestjs/common/utils/random-string-genera
 import { MailService } from 'src/mail/mail.service';
 import { confirmEmailDto } from './dto/auth-confirm-email.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
+import { resetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -153,7 +154,50 @@ export class AuthService {
       });
     }
   }
-  async resetPassword() {}
+  async resetPassword(resetPassword: resetPasswordDto) {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          confirmHash: resetPassword.confirmHash,
+        },
+      });
+      if (!user) {
+        throw new HttpException(
+          {
+            status: HttpStatus.UNPROCESSABLE_ENTITY,
+            errors: {
+              user: 'userNotExists',
+            },
+          },
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      const hashedPassword = await this.hashData(resetPassword.password);
+      await this.prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          hash: hashedPassword,
+          password: resetPassword.password,
+          statusId: 2,
+        },
+      });
+      const tokens = await this.getTokens(user.id, hashedPassword);
+      await this.updateRefreshTokenHash(user.id, tokens.refresh_token);
+      return tokens;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          errors: {
+            message: error.message,
+          },
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 
   // utils functions to be placed in a utils folder later
   async updateRefreshTokenHash(userId: number, refreshToken: string) {
