@@ -180,7 +180,8 @@ export class AuthService {
         data: {
           hash: hashedPassword,
           password: resetPassword.password,
-          statusId: 2,
+          statusId: 1,
+          confirmHash: undefined,
         },
       });
       const tokens = await this.getTokens(user.id, hashedPassword);
@@ -191,7 +192,7 @@ export class AuthService {
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           errors: {
-            message: error.message,
+            message: error,
           },
         },
         HttpStatus.INTERNAL_SERVER_ERROR,

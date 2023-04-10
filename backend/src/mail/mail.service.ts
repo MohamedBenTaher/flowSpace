@@ -33,7 +33,7 @@ export class MailService {
       context: {
         // ✏️ filling curly brackets with content
         name: mailData.data.username,
-        url: `${this.configService.get('FRONTEND_DOMAIN')}/auth/reset/${
+        url: `${this.configService.get('FRONTEND_DOMAIN')}/auth/reset?token=${
           mailData.data.hash
         }`,
       },

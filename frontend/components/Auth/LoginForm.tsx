@@ -11,7 +11,8 @@ import LocalStorageService from "@/services/localStorage/LocalStorageService";
 
 type LoginFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
-  confirmed:string|boolean|null
+  confirmed?:string|boolean|null
+  reset?:string|boolean|null
 };
 // redirecet in nextjs
 const LoginSchema = Yup.object().shape({
@@ -23,7 +24,7 @@ const LoginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 const initialValues :LoginDto ={ email: "", password: "" }
-const LoginForm = ({ setIsMember,confirmed }: LoginFormProps) => {
+const LoginForm = ({ setIsMember,confirmed,reset }: LoginFormProps) => {
    const storage = new LocalStorageService();
     const router = useRouter();
     const [passwordVisible, setPasswordVisible] = useState(true);
@@ -62,7 +63,11 @@ const LoginForm = ({ setIsMember,confirmed }: LoginFormProps) => {
         </div>
         {confirmed?(
           <div className="rounded-lg bg-green-500 text-slate-50 shadow-md w-full h-12 p-2 mb-10">Account Confirmed Successfully , welcome &#127881; &#127881;</div>
-        ):(
+        ):
+        reset?(
+          <div className="rounded-lg bg-green-500 text-slate-50 shadow-md w-full h-12 p-2 mb-10">Password Updated , login with your new credentials &#127881; &#127881;</div>
+        ):
+        (
           null
         )}
                   <div className="mb-4">
@@ -140,7 +145,7 @@ const LoginForm = ({ setIsMember,confirmed }: LoginFormProps) => {
                     </div>
                     </div>
                   <div className="w-full flex items-center justify-end  mb-4 font-semibold text-sm text-primary hover:text-secondary hover:underline decoration-from-font hover:decoration-blue-400'">
-                    <Link href={'#'}>Forgot password ?</Link>
+                    <Link href={'/auth/forgot'}>Forgot password ?</Link>
                   </div>
                   <button
                       type="submit"

@@ -8,7 +8,7 @@ const ResetSchema = Yup.object().shape({
     password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
-    confrimedPassword: Yup.string()
+    confirmPassword: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
   });
@@ -22,36 +22,46 @@ const ResetSchema = Yup.object().shape({
     }
     return error;
   };
+  type ResetFormProps = {
+    token:string|null
+  };
   const initialValues :resetDto ={ password: "", confirmPassword: "" }
-const PasswordResetForm = () => {
+const PasswordResetForm = ({token}:ResetFormProps) => {
+   
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const router=useRouter()
-
+    if(!token){
+        router.push('auth')
+    }
   return (
     <Formik
     initialValues={initialValues}
     validationSchema={ResetSchema}
     onSubmit={async (values) => { 
-      console.log('reached login ',values)
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/login`,{
+      console.log('reached reset ',values)
+      const resetPayload ={
+        password:values.password,
+        confirmHash:token
+      }
+      console.log(resetPayload)
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/email/reset`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json'
         },
-        body:JSON.stringify(values)
+        body:JSON.stringify(resetPayload)
       }).then( async(response)=>{
-        console.log( await response.json())
-        const tokens =await response.json()
-        console.log('tokens',tokens)
-        router.push('/home');
+        if(response.ok){
+            router.push('/auth?reset=true');
+        }
       }).catch((error)=>{
         console.log(error)
       })
     }}
   >
     {({ errors, touched,values }) => (
-        <Form>
+        <Form className="w-96">
     <><div className="mb-4">
                   <label
                       htmlFor="password"
@@ -140,7 +150,7 @@ const PasswordResetForm = () => {
                       </div>
                       <button
                       type="submit"
-                      className="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full"
+                      className="mt-12 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full"
                   >
                       Reset Password
                   </button>

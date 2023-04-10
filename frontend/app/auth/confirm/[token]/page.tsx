@@ -38,7 +38,7 @@ export default function ConfirmationPage({ params }: Props): JSX.Element {
     if (params?.token) {
       confirmEmail();
     }
-  }, []);
+  }, [params.token,router]);
 
   return (
     <div className="flex items-center justify-center h-screen w-screen">
