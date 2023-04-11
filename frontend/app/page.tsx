@@ -1,5 +1,7 @@
 import Footer from "@/components/Footer/Footer"
 import Navbar from "@/components/Navbar/Navbar"
+import withAuth from "@/services/Authentication/withAuth"
+
 function Homepage() {
   return (
     <>
@@ -10,4 +12,4 @@ function Homepage() {
   )
 }
 
-export default Homepage
+export default withAuth(Homepage)

@@ -11,8 +11,9 @@ import LocalStorageService from "@/services/localStorage/LocalStorageService";
 
 type LoginFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
-  confirmed?:string|boolean|null
-  reset?:string|boolean|null
+  confirmed?:string|boolean|null;
+  reset?:string|boolean|null;
+  unauthorized:string|boolean|null;
 };
 // redirecet in nextjs
 const LoginSchema = Yup.object().shape({
@@ -24,7 +25,7 @@ const LoginSchema = Yup.object().shape({
     .required("Password is required"),
 });
 const initialValues :LoginDto ={ email: "", password: "" }
-const LoginForm = ({ setIsMember,confirmed,reset }: LoginFormProps) => {
+const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps) => {
    const storage = new LocalStorageService();
     const router = useRouter();
     const [passwordVisible, setPasswordVisible] = useState(true);
@@ -43,7 +44,6 @@ const LoginForm = ({ setIsMember,confirmed,reset }: LoginFormProps) => {
           },
           body:JSON.stringify(values)
         }).then( async(response)=>{
-          console.log( await response.json())
           const tokens =await response.json()
           console.log('tokens',tokens)
           storage.setItem('access_token',tokens.access_token)
@@ -67,9 +67,11 @@ const LoginForm = ({ setIsMember,confirmed,reset }: LoginFormProps) => {
         reset?(
           <div className="rounded-lg bg-green-500 text-slate-50 shadow-md w-full h-12 p-2 mb-10">Password Updated , login with your new credentials &#127881; &#127881;</div>
         ):
-        (
-          null
-        )}
+        unauthorized ?(
+          <div className="rounded-lg bg-yellow-400 text-slate-50 shadow-md w-full h-12 p-2 mb-10">Unauthorized , login with your credentials </div>
+        ):
+        null
+        }
                   <div className="mb-4">
                       <label
                           htmlFor="email"
