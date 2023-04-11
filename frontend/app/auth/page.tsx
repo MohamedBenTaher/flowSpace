@@ -7,7 +7,8 @@ const Auth = () => {
     const searchParams = useSearchParams();
     const search = searchParams.get('confirmed');
     const reset = searchParams.get('reset');
-    const [isMember,setIsMember]=React.useState<boolean>(search||reset ? true :false)
+    const unauthorized = searchParams.get('unauthorized');
+    const [isMember,setIsMember]=React.useState<boolean>(search||reset||unauthorized? true :false)
     console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
   return (
     <div className='w-full flex items-center justify-around flex-col sm:flex-row px-10'>
@@ -20,7 +21,7 @@ const Auth = () => {
     <div>
     </div>
     {isMember ?
-     <LoginForm setIsMember={setIsMember} confirmed={search} reset={reset}/>
+     <LoginForm setIsMember={setIsMember} confirmed={search} reset={reset} unauthorized={unauthorized}/>
      :
      <SignInForm setIsMember={setIsMember}/>
     }
