@@ -11,6 +11,7 @@ import {
   HttpStatus,
   UseGuards,
   Req,
+  Res,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
@@ -26,6 +27,8 @@ import { Tokens } from './types';
 import { confirmEmailDto } from './dto/auth-confirm-email.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { resetPasswordDto } from './dto/reset-password.dto';
+import { Response as ResponseType } from 'express';
+import { jwtConstants } from './constants';
 
 @Controller('auth')
 export class AuthController {
@@ -34,35 +37,76 @@ export class AuthController {
   @Public()
   @Post('/local/register')
   @HttpCode(HttpStatus.CREATED)
-  register(@Body() authDto: CreateUserDto): Promise<Tokens> {
+  register(
+    @Body() authDto: CreateUserDto,
+    @Res({ passthrough: true }) res: ResponseType,
+  ): Promise<Tokens> {
     return this.authService.register(authDto);
   }
 
   @Public()
   @Post('/local/login')
   @HttpCode(HttpStatus.OK)
-  signInLocal(@Body() authDto: loginDto): Promise<Tokens> {
+  async signInLocal(
+    @Body() authDto: loginDto,
+    @Res({ passthrough: true }) response: ResponseType,
+  ): Promise<void> {
     {
-      return this.authService.signInLocal(authDto);
+      const tokens = await this.authService.signInLocal(authDto);
+      response.cookie('access_token', tokens.access_token, {
+        httpOnly: true, // prevent XSS attacks
+        // secure: true, // only send over HTTPS
+        maxAge: jwtConstants.access_token_expiration, // set expiration time
+      });
+      response.cookie('refresh_token', tokens.refresh_token, {
+        httpOnly: true,
+        // secure: true,
+        maxAge: jwtConstants.refresh_token_expiration,
+      });
     }
   }
 
   @ApiBearerAuth()
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  logout(@getCurrentUserId() userId: number) {
-    return this.authService.logout(userId);
+  logout(
+    @getCurrentUserId() userId: number,
+    @Res({ passthrough: true }) response: ResponseType,
+  ) {
+    this.authService.logout(userId);
+    response.cookie('access_token', '', {
+      httpOnly: true, // prevent XSS attacks
+      // secure: true, // only send over HTTPS
+      expires: new Date(), // set expiration time
+    });
+    response.cookie('refresh_token', '', {
+      httpOnly: true,
+      // secure: true,
+      expires: new Date(),
+    });
   }
 
   @ApiBearerAuth()
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
-  refreshTokens(
+  async refreshTokens(
     @getCurrentUserId() userId: number,
     @getCurrentUser('refreshToken') refreshToken: string,
+    @Res({ passthrough: true }) response: ResponseType,
   ) {
-    return this.authService.refreshTokens(userId, refreshToken);
+    const tokens = await this.authService.refreshTokens(userId, refreshToken);
+    response.cookie('access_token', tokens.access_token, {
+      httpOnly: true, // prevent XSS attacks
+      // secure: true, // only send over HTTPS
+      maxAge: jwtConstants.access_token_expiration, // set expiration time
+    });
+    response.cookie('refresh_token', tokens.refresh_token, {
+      httpOnly: true,
+      // secure: true,
+      maxAge: jwtConstants.refresh_token_expiration,
+    });
   }
+
   @Public()
   @Post('email/confirm')
   @HttpCode(HttpStatus.OK)

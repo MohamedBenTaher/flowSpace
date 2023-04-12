@@ -18,7 +18,8 @@ import { MailService } from 'src/mail/mail.service';
 import { confirmEmailDto } from './dto/auth-confirm-email.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { resetPasswordDto } from './dto/reset-password.dto';
-
+import { Request as RequestType } from 'express';
+import { Response as ResponseType } from 'express';
 @Injectable()
 export class AuthService {
   constructor(
@@ -88,7 +89,6 @@ export class AuthService {
     await this.updateRefreshTokenHash(user.id, tokens.refresh_token);
     return tokens;
   }
-
   async confirmEmail(hash: confirmEmailDto) {
     const user = await this.prisma.user.findFirstOrThrow({
       where: {

@@ -9,6 +9,7 @@ import { LoginDto } from "./dto/login.dto";
 import { useRouter } from 'next/navigation';
 import LocalStorageService from "@/services/localStorage/LocalStorageService";
 
+
 type LoginFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
   confirmed?:string|boolean|null;
@@ -26,7 +27,6 @@ const LoginSchema = Yup.object().shape({
 });
 const initialValues :LoginDto ={ email: "", password: "" }
 const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps) => {
-   const storage = new LocalStorageService();
     const router = useRouter();
     const [passwordVisible, setPasswordVisible] = useState(true);
     console.log('in component',process.env.NEXT_PUBLIC_BACKEND_URL)
@@ -44,11 +44,7 @@ const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps)
           },
           body:JSON.stringify(values)
         }).then( async(response)=>{
-          const tokens =await response.json()
-          console.log('tokens',tokens)
-          storage.setItem('access_token',tokens.access_token)
-          storage.setItem('refresh_token',tokens.refresh_token)
-          router.push('/home');
+          router.push('/');
         }).catch((error)=>{
           console.log(error)
         })
