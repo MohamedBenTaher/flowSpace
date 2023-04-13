@@ -40,11 +40,15 @@ const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps)
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/login`,{
           method:'POST',
           headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            'Access-Control-Allow-Origin':'*'
           },
+          credentials: 'include',
           body:JSON.stringify(values)
         }).then( async(response)=>{
+          if(response.ok){
           router.push('/');
+          }
         }).catch((error)=>{
           console.log(error)
         })

@@ -1,7 +1,6 @@
 import Footer from "@/components/Footer/Footer"
 import Navbar from "@/components/Navbar/Navbar"
 import withAuth from "@/services/Authentication/withAuth"
-
 function Homepage() {
   return (
     <>

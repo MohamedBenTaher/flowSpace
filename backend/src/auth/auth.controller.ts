@@ -51,19 +51,21 @@ export class AuthController {
     @Body() authDto: loginDto,
     @Res({ passthrough: true }) response: ResponseType,
   ): Promise<void> {
-    {
-      const tokens = await this.authService.signInLocal(authDto);
-      response.cookie('access_token', tokens.access_token, {
-        httpOnly: true, // prevent XSS attacks
-        // secure: true, // only send over HTTPS
-        maxAge: jwtConstants.access_token_expiration, // set expiration time
-      });
-      response.cookie('refresh_token', tokens.refresh_token, {
-        httpOnly: true,
-        // secure: true,
-        maxAge: jwtConstants.refresh_token_expiration,
-      });
-    }
+    const tokens = await this.authService.signInLocal(authDto);
+    response.cookie('access_token', tokens.access_token, {
+      httpOnly: true, // prevent XSS attacks
+      secure: true, // only send over HTTPS
+      maxAge: jwtConstants.access_token_expiration, // set expiration time
+    });
+    response.cookie('refresh_token', tokens.refresh_token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: jwtConstants.refresh_token_expiration,
+    });
+    response.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    response.setHeader('Access-Control-Allow-Credentials', 'true');
+    response.send('Cookie set');
+    // return tokens;
   }
 
   @ApiBearerAuth()
@@ -97,14 +99,18 @@ export class AuthController {
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
     response.cookie('access_token', tokens.access_token, {
       httpOnly: true, // prevent XSS attacks
-      // secure: true, // only send over HTTPS
+      secure: true, // only send over HTTPS
       maxAge: jwtConstants.access_token_expiration, // set expiration time
     });
     response.cookie('refresh_token', tokens.refresh_token, {
       httpOnly: true,
-      // secure: true,
+      secure: true,
       maxAge: jwtConstants.refresh_token_expiration,
     });
+    response.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    response.setHeader('Access-Control-Allow-Credentials', 'true');
+    response.send('Cookie set');
+    return tokens;
   }
 
   @Public()
