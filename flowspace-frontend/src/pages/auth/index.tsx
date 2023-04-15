@@ -1,8 +1,7 @@
-'use client'
-import LoginForm from '@/components/Auth/LoginForm'
-import SignInForm from '@/components/Auth/SigninForm'
 import React ,{useState} from 'react'
 import { useSearchParams } from 'next/navigation';
+import LoginForm from '@/Components/Auth/LoginForm';
+import SignInForm from '@/Components/Auth/SigninForm';
 const Auth = () => {
     const searchParams = useSearchParams();
     const search = searchParams.get('confirmed');

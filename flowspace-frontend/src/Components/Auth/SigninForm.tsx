@@ -3,12 +3,9 @@ import React,{useState,SetStateAction} from "react";
 import { Formik, Form, Field, ErrorMessage,FieldInputProps,FieldMetaProps,FieldProps, FormikProps} from "formik";
 import * as Yup from "yup";
 import { SignInDto } from "./dto/signIn.dto";
-import { countries } from "@/utils/countries-list";
-import Link from "next/link";
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { Dispatch } from "react";
-
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
 type SignInFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -216,10 +213,10 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
                             className={` appearance-none pl-10 border rounded w-full py-2 px-3 bg-white text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                             meta.error && meta.touched ? 'border-red-500' : ''
                             }`}
-                            selected={field.value}
+                            value={field.value}
                             onChange={(date) => form.setFieldValue('birthday', date)}
-                            dateFormat="MM/dd/yyyy"
-                            placeholderText="Select your birthdate"
+                            format="MM/dd/yyyy"
+  
                         />
                         {meta.error && meta.touched && (
                             <div className="text-red-500 text-sm mt-2">{meta.error}</div>

@@ -3,11 +3,10 @@ import React,{ useState} from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
-import Google from "@/assets/icons/Google";
-import Facebook from "@/assets/icons/Facebook";
+import Google from '../../assets/icons/Google.svg'
+import Facebook from '../../assets/icons/Facebook.svg'
 import { LoginDto } from "./dto/login.dto";
 import { useRouter } from 'next/navigation';
-import LocalStorageService from "@/services/localStorage/LocalStorageService";
 
 
 type LoginFormProps = {
@@ -164,7 +163,6 @@ const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps)
                   <button
                       type="submit"
                       className="flex w-full flex-row md:flex-col lg:flex-row items-center justify-center bg-zinc-100 border border-slate-400 hover:bg-zinc-200 text-text font-bold p-4 rounded-lg sm:w-1/3"
-                      
                   >
                         <Google width={25} height={25}/>
                     <div className="mx-3">

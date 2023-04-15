@@ -1,4 +1,4 @@
-import ForgotForm from '@/components/Auth/ForgotForm'
+import ForgotForm from '@/Components/Auth/ForgotForm'
 import React from 'react'
 
 function page() {
