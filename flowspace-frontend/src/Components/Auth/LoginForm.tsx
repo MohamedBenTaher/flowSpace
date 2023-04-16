@@ -1,14 +1,11 @@
-'use client'
 import React,{ useState} from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
-import Google from '../../assets/icons/Google.svg'
-import Facebook from '../../assets/icons/Facebook.svg'
 import { LoginDto } from "./dto/login.dto";
 import { useRouter } from 'next/navigation';
-
-
+import Google from "@/assets/icons/Google";
+import Facebook from "@/assets/icons/Facebook";
 type LoginFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
   confirmed?:string|boolean|null;
