@@ -32,23 +32,27 @@ const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps)
       initialValues={initialValues}
       validationSchema={LoginSchema}
       onSubmit={async (values) => { 
-        console.log('reached login ',values)
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/login`,{
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json',
-            'Access-Control-Allow-Origin':'*'
-          },
-          credentials: 'include',
-          body:JSON.stringify(values)
-        }).then( async(response)=>{
-          if(response.ok){
-          router.push('/');
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/login`,{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(values)
+          })
+        
+          if (response.ok) {
+            router.push('/')
+          } else {
+            const errorMessage = await response.text()
+            // Display an error message to the user
+            console.log(`Login failed: ${errorMessage}`)
           }
-        }).catch((error)=>{
-          console.log(error)
-        })
-      }}
+        } catch (error:any) {
+          // Handle any network errors
+          console.log(`Login failed: ${error.message}`)
+        }}}
     >
       {({ errors, touched }) => (
         <>

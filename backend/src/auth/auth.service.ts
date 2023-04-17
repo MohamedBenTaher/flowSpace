@@ -20,6 +20,9 @@ import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { resetPasswordDto } from './dto/reset-password.dto';
 import { Request as RequestType } from 'express';
 import { Response as ResponseType } from 'express';
+import { SocialInterface } from 'src/interfaces/social.inteface';
+import { StatusEnum } from 'status/status.enum';
+import { plainToClass } from 'class-transformer';
 @Injectable()
 export class AuthService {
   constructor(
@@ -198,6 +201,64 @@ export class AuthService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+  async validateSocialLogin(
+    authProvider: string,
+    socialData: SocialInterface,
+  ): Promise<{ tokens: object; user: Object }> {
+    const socialEmail = socialData.email?.toLowerCase();
+
+    const userByEmail = await this.prisma.user.findFirst({
+      where: {
+        email: socialEmail,
+      },
+    });
+    const socialId = socialData.id;
+    let user = await this.prisma.user.findFirstOrThrow({
+      where: {
+        socialId: socialId,
+        provider: authProvider,
+      },
+    });
+
+    if (user) {
+      if (socialEmail && !userByEmail) {
+        await this.prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            email: socialEmail,
+          },
+        });
+      }
+    } else if (userByEmail) {
+      user = userByEmail;
+    } else {
+      user = await this.prisma.user.create({
+        data: {
+          firstName: socialData.firstName,
+          lastName: socialData.lastName,
+          email: socialEmail ? socialEmail : undefined,
+          socialId: socialData.id,
+          provider: authProvider,
+        },
+      });
+
+      user = await this.prisma.user.findUnique({
+        where: {
+          id: user.id,
+        },
+      });
+    }
+
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRefreshTokenHash(user.id, tokens.refresh_token);
+
+    return {
+      tokens,
+      user,
+    };
   }
 
   // utils functions to be placed in a utils folder later

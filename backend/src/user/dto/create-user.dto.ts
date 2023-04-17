@@ -101,4 +101,14 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   confirmHash: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  provider?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  socialId?: string;
 }

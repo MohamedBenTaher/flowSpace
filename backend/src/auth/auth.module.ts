@@ -16,5 +16,6 @@ import { MailService } from 'src/mail/mail.service';
     PrismaService,
     MailService,
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}

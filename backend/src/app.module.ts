@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './common/guards';
 import { MailModule } from './mail/mail.module';
 import { MailService } from './mail/mail.service';
+import { AuthGoogleModule } from './auth-google/auth-google.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MailService } from './mail/mail.service';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     MailModule,
+    AuthGoogleModule,
   ],
   controllers: [AppController],
   providers: [
