@@ -6,6 +6,7 @@ import { LoginDto } from "./dto/login.dto";
 import { useRouter } from 'next/navigation';
 import Google from "@/assets/icons/Google";
 import Facebook from "@/assets/icons/Facebook";
+import { useSession, signIn, signOut } from "next-auth/react"
 type LoginFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
   confirmed?:string|boolean|null;
@@ -23,11 +24,25 @@ const LoginSchema = Yup.object().shape({
 });
 const initialValues :LoginDto ={ email: "", password: "" }
 const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps) => {
-  const [user, setUser] = useState(null);
-     
+  const { data: session } = useSession()
     const router = useRouter();
     const [passwordVisible, setPasswordVisible] = useState(true);
-    console.log('in component',process.env.NEXT_PUBLIC_BACKEND_URL)
+    const handleGoogleSignIn=async()=>{
+       signIn('google')
+    }
+    useEffect(()=>{
+      if(session){
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`,{
+          method:'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify(session.user)
+        })
+      }
+    },[])
+  
   return (
     
     <><Formik
@@ -165,8 +180,13 @@ const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps)
         <span className="flex-shrink mx-4 text-gray-400">or</span>
         <div className="flex-grow border-t border-gray-400"></div>
       </div><div className="flex sm:flex-row  flex-col items-center justify-evenly w-full">
+        {session?(
+          <div>{session.user?.name}</div>
+        ):(
+          null
+        )}
         <button
-          id="customBtn"
+          onClick={()=>handleGoogleSignIn()}
           className="flex w-full flex-row md:flex-col lg:flex-row items-center justify-center bg-zinc-100 border border-slate-400 hover:bg-zinc-200 text-text font-bold p-4 rounded-lg sm:w-1/3"
         >
           <Google width={25} height={25} />
