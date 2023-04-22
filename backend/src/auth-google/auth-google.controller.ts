@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthGoogleService } from './auth-google.service';
 import { AuthGoogleLoginDto } from './dto/auth-google-login.dto';
+import { Public } from 'src/common/decorators';
 
 @ApiTags('Auth')
 @Controller({
@@ -14,7 +15,7 @@ export class AuthGoogleController {
     private readonly authService: AuthService,
     private readonly authGoogleService: AuthGoogleService,
   ) {}
-
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: AuthGoogleLoginDto) {

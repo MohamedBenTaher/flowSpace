@@ -29,17 +29,23 @@ const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps)
     const [passwordVisible, setPasswordVisible] = useState(true);
     const handleGoogleSignIn=async()=>{
        signIn('google')
+
     }
     useEffect(()=>{
-      if(session){
+     const sendToken=()=>{
+      const user=session?.user
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`,{
           method:'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           credentials: 'include',
-          body: JSON.stringify(session.user)
+          body: JSON.stringify({idToken:session?.id_token})
         })
+        console.log(user,session?.id_token)
+      }
+      if(session){
+        sendToken()
       }
     },[])
   

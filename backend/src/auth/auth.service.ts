@@ -214,7 +214,7 @@ export class AuthService {
       },
     });
     const socialId = socialData.id;
-    let user = await this.prisma.user.findFirstOrThrow({
+    let user = await this.prisma.user.findFirst({
       where: {
         socialId: socialId,
         provider: authProvider,
