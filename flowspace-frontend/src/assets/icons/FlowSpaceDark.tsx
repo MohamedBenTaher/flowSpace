@@ -132,9 +132,6 @@ const FlowSpacwDark = (props: SVGProps<SVGSVGElement>) => (
                   height={90.436}
                   className="icon-s-0"
                   data-fill-palette-color="quaternary"
-                  style={{
-                    enableBackground: 'new 0 0 100 100',
-                  }}
                   viewBox="11.215 23.164 77.57 53.671"
                   {...props}
                 >

@@ -1,12 +1,12 @@
 import * as React from "react"
 import { SVGProps } from "react"
-const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={2000} height={1878} {...props}>
+const FlowSpaceLogoLight = (props: SVGProps<SVGSVGElement>) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={130} height={140} {...props}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width={2000}
-      height={1878}
+      width={150}
+      height={139}
       data-background-color="#fafafa"
       transform="translate(-.69 .76)"
       viewBox="0 0 263 247"
@@ -125,9 +125,6 @@ const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
                   height={90.436}
                   className="icon-s-0"
                   data-fill-palette-color="quaternary"
-                  style={{
-                    enableBackground: "new 0 0 100 100",
-                  }}
                   viewBox="11.215 23.164 77.57 53.671"
                   {...props}
                 >
@@ -159,4 +156,4 @@ const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
     </svg>
   </svg>
 )
-export default SvgComponent
+export default FlowSpaceLogoLight
