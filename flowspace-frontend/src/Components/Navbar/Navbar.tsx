@@ -2,17 +2,23 @@ import React from 'react'
 import { useState } from 'react'
 import FlowSpacwDark from '@/assets/icons/FlowSpaceDark'
 import FlowSpaceLight from '@/assets/icons/FlowSpaceLight'
-FlowSpaceLight
+import FlowSpaceLogoLight from '@/assets/icons/FlowSpaceLogoLight'
+import FlowSpaceLogoDark from '@/assets/icons/FlowSpaceLogoDark'
+import SearchBar from './SearchBar'
+USEq
+
 const Navbar = () => {
   const [isOpen,setIsOpen]=useState(false)
   const [sideOpen,setSideOpen]=useState(false)
   return (
-    <header className="bg-white">
-  <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-    <div className="flex lg:flex-1">
-      <FlowSpacwDark />
-      <a href="#" className="-m-1.5 p-1.5">
-        <h2 className="sr-only text-slate-900">FlowSpace</h2>
+    <header className="bg-red-600">
+  <nav className=" flex max-w-7xl items-center justify-between lg:px-8" aria-label="Global">
+    <div className="flex lg:flex-1 items-center justify-start">
+    <a href="#" className="w-max h-max p-1.5 flex flex-row items-center justify-start">
+      <FlowSpaceLogoDark />
+      <h2 className=" text-slate-900">
+        FlowSpace
+      </h2>
       </a>
     </div>
     <div className="flex lg:hidden">
@@ -23,7 +29,13 @@ const Navbar = () => {
         </svg>
       </button>
     </div>
-    <div className="hidden lg:flex lg:gap-x-12">
+    <div className=' w-2/5'>
+            <SearchBar/> 
+      <div>
+        <img className='rounded-full' src={`https://ui-avatars.com/api/?name=Mohamed+Bentaher`}/>
+      </div>
+    </div>
+    {/* <div className="hidden lg:flex lg:gap-x-4">
       <div className="relative">
         <button type="button" className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900" aria-expanded="false" onClick={()=>setIsOpen((prev)=>!prev)}>
           Product
@@ -131,14 +143,14 @@ const Navbar = () => {
       </div>
         
 
-      <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Features</a>
-      <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Marketplace</a>
-      <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Company</a>
-    </div>
+    </div> */}
+    {/* {
+      
     <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:space-x-6">
       <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
       <a href="#" className="text-sm font-semibold leading-6 text-gray-900">Sign In<span aria-hidden="true">&rarr;</span></a>
     </div>
+    } */}
     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
       
     </div>
