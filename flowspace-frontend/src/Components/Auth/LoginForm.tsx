@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Google from "@/assets/icons/Google";
 import Facebook from "@/assets/icons/Facebook";
 import { useSession, signIn, signOut } from "next-auth/react"
+import { loginUser, sendToken } from "@/services/api";
 type LoginFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
   confirmed?:string|boolean|null;
@@ -26,46 +27,27 @@ const initialValues :LoginDto ={ email: "", password: "" }
 const LoginForm = ({ setIsMember,confirmed,reset,unauthorized }: LoginFormProps) => {
   const { data: session } = useSession()
     const router = useRouter();
+    const [tokenSet,setTokenSet]=useState(false)
     const [passwordVisible, setPasswordVisible] = useState(true);
     const handleGoogleSignIn=async()=>{
        signIn('google')
-
+      setTokenSet(true)
     }
     useEffect(()=>{
-     const sendToken=()=>{
-      const user=session?.user
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`,{
-          method:'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include',
-          body: JSON.stringify({idToken:session?.id_token})
-        })
-        console.log(user,session?.id_token)
-      }
-      if(session){
-        sendToken()
+      if(session && tokenSet){
+        sendToken(session)
       }
     },[])
-  
+
   return (
-    
+
     <><Formik
       initialValues={initialValues}
       validationSchema={LoginSchema}
       onSubmit={async (values) => {
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(values)
-          });
-
-          if (response.ok) {
+           const response= await loginUser(values)
+          if (response) {
             router.push('/');
           } else {
             const errorMessage = await response.text();

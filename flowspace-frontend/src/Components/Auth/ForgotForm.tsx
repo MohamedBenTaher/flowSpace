@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { resetDto } from "./dto/reset.dto";
 import { useRouter } from "next/navigation";
+import { forgotPassword } from "@/services/api";
 const forgotSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email format').required('An email is required'),
   });
@@ -16,20 +17,10 @@ const ForgotForm = () => {
     initialValues={initialValues}
     validationSchema={forgotSchema}
     onSubmit={async (values) => { 
-      console.log('reached reset ',values)
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/email/forgot`,{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify(values)
-      }).then( async(response)=>{
-        if(response.ok){
+        const forgottenPassword=await forgotPassword(values)
+        if(forgottenPassword){
             router.push('/auth');
         }
-      }).catch((error)=>{
-        console.log(error)
-      })
     }}
   >
     {({ errors, touched }) => (

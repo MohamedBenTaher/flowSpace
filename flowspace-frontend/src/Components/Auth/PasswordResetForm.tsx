@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { resetDto } from "./dto/reset.dto";
 import { useRouter } from "next/navigation";
+import { resetPassword } from "@/services/api";
 const ResetSchema = Yup.object().shape({
     password: Yup.string()
     .min(8, "Password must be at least 8 characters")
@@ -27,7 +28,7 @@ const ResetSchema = Yup.object().shape({
   };
   const initialValues :resetDto ={ password: "", confirmPassword: "" }
 const PasswordResetForm = ({token}:ResetFormProps) => {
-   
+
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const router=useRouter()
@@ -38,26 +39,11 @@ const PasswordResetForm = ({token}:ResetFormProps) => {
     <Formik
     initialValues={initialValues}
     validationSchema={ResetSchema}
-    onSubmit={async (values) => { 
-      console.log('reached reset ',values)
-      const resetPayload ={
-        password:values.password,
-        confirmHash:token
-      }
-      console.log(resetPayload)
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/email/reset`,{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify(resetPayload)
-      }).then( async(response)=>{
-        if(response.ok){
+    onSubmit={async (values) => {
+      const resetedPassword=await resetPassword(values,token)
+        if(resetedPassword){
             router.push('/auth?reset=true');
         }
-      }).catch((error)=>{
-        console.log(error)
-      })
     }}
   >
     {({ errors, touched,values }) => (

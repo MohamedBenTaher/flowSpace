@@ -5,7 +5,6 @@ import FlowSpaceLight from '@/assets/icons/FlowSpaceLight'
 import FlowSpaceLogoLight from '@/assets/icons/FlowSpaceLogoLight'
 import FlowSpaceLogoDark from '@/assets/icons/FlowSpaceLogoDark'
 import SearchBar from './SearchBar'
-USEq
 
 const Navbar = () => {
   const [isOpen,setIsOpen]=useState(false)

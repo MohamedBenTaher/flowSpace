@@ -6,6 +6,7 @@ import { SignInDto } from "./dto/signIn.dto";
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
+import { signIn } from "@/services/api";
 type SignInFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -56,22 +57,10 @@ const SignInForm = ({ setIsMember }: SignInFormProps) => {
       initialValues={initialValues}
       validationSchema={SigninSchema}
       onSubmit={async (values :SignInDto) => {
-        const payload:SignInDto= values;
-        delete payload.confirmPassword
-        console.log('reached', payload)
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/register`,{
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          body:JSON.stringify(payload)
-        })
-        .then(()=>{
+         const response =await signIn(values)
+         if(response){
           setSubmitted(true)
-        })
-        .catch((error)=>{
-          console.log('error at Signin ',error.message)
-        })
+         }
       }}
     >
       {({ errors , touched,values ,isSubmitting}) => (
