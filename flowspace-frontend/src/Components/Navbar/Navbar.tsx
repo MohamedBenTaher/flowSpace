@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isOpen,setIsOpen]=useState(false)
   const [sideOpen,setSideOpen]=useState(false)
   return (
-    <header className="bg-red-600">
+    <header className="bg-slate-300">
   <nav className=" flex max-w-7xl items-center justify-between lg:px-8" aria-label="Global">
     <div className="flex lg:flex-1 items-center justify-start">
     <a href="#" className="w-max h-max p-1.5 flex flex-row items-center justify-start">
@@ -28,10 +28,12 @@ const Navbar = () => {
         </svg>
       </button>
     </div>
-    <div className=' w-2/5'>
+    <div className=' w-4/5 flex flex-row items-center justify-around h-full'>
+      <div className='w-3/5'>
             <SearchBar/> 
+      </div>
       <div>
-        <img className='rounded-full' src={`https://ui-avatars.com/api/?name=Mohamed+Bentaher`}/>
+        <img className='rounded-full' src={`https://ui-avatars.com/api/?name=Mohamed+Bentaher`} width={40}/>
       </div>
     </div>
     {/* <div className="hidden lg:flex lg:gap-x-4">

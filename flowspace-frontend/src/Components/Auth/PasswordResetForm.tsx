@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { resetDto } from "./dto/reset.dto";
 import { useRouter } from "next/navigation";
-import { resetPassword } from "@/services/api";
+import { resetPassword } from "@/services/auth/api";
 const ResetSchema = Yup.object().shape({
     password: Yup.string()
     .min(8, "Password must be at least 8 characters")

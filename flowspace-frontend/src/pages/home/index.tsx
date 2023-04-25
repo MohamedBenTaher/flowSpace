@@ -1,7 +1,8 @@
 import Footer from "@/Components/Footer/Footer"
 import Navbar from "@/Components/Navbar/Navbar"
-
+import { GetServerSideProps } from "next"
 function Homepage() {
+
   return (
     <>
     <Navbar/>
@@ -10,5 +11,8 @@ function Homepage() {
     </>
   )
 }
+
+
+
 
 export default Homepage

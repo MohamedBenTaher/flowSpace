@@ -2,7 +2,7 @@ import React ,{useEffect, useState} from 'react'
 import { useSearchParams } from 'next/navigation';
 import LoginForm from '@/Components/Auth/LoginForm';
 import SignInForm from '@/Components/Auth/SigninForm';
-import { confirmAccount } from '@/services/api';
+import { confirmAccount } from '@/services/auth/api';
 import { useRouter } from 'next/router';
 import ConfirmationLoader from '@/Components/Auth/ConfirmationLoader';
 

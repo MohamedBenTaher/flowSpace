@@ -9,14 +9,14 @@ const FlowSpaceLogoDark = (props: SVGProps<SVGSVGElement>) => (
       height={80}
       data-background-color="#fafafa"
     //   transform="translate(-.69 .76)"
-      viewBox="0 0 300 120"
+      viewBox="0 0 300 150"
       {...props}
     >
       <svg
         width={262.819}
         height={247.2}
         // transform="translate(.09 -.1)"
-        viewBox="0 0 262.819 257.2"
+        viewBox="0 0 262.819 260.2"
         {...props}
       >
         <svg

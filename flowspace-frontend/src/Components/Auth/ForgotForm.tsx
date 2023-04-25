@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { resetDto } from "./dto/reset.dto";
 import { useRouter } from "next/navigation";
-import { forgotPassword } from "@/services/api";
+import { forgotPassword } from "@/services/auth/api";
 const forgotSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email format').required('An email is required'),
   });

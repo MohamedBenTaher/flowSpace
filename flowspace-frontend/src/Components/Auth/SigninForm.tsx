@@ -6,7 +6,7 @@ import { SignInDto } from "./dto/signIn.dto";
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
-import { signIn } from "@/services/api";
+import { signIn } from "@/services/auth/api";
 type SignInFormProps = {
   setIsMember: React.Dispatch<React.SetStateAction<boolean>>;
 };
