@@ -5,29 +5,17 @@ import { useUsers } from '@/hooks/User';
 import { useAuth } from '@/Context/Context';
 import { useQuery } from '@tanstack/react-query';
 import { getAuthenticatedUser } from '@/services/user/api';
+import { log } from 'console';
 
 export default function Home() {
   const { user, setUser } = useAuth();
 
-  useEffect(() => {
-    async function fetchUser() {
-      const token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIyLCJlbWFpbCI6Im1iZW50YWhlcjE5OThAZ21haWwuY29tIiwiaWF0IjoxNjgyNDQyODk3LCJleHAiOjE2ODI0NDM3OTd9.-WCi3kzV0b_vP8sbgn8q8DI7Rq90jUFNyQoWBLqAf2c';
-      if (token) {
-        const loggedUser = await getAuthenticatedUser(token);
-        if (loggedUser) {
-          console.log('reached');
-          console.log('user', loggedUser);
-          setUser(loggedUser);
-        }
-      }
-    }
 
     if (!user) {
-      fetchUser();
+     const user =useQuery(['user'], () => getAuthenticatedUser());
+     console.log(user.data)
+     setUser(user.data)
     }
-  }, []);
-
   return (
     <>
       <Navbar />

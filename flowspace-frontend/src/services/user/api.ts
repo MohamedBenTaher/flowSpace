@@ -1,8 +1,14 @@
 import { jwtDecrypt } from "jose";
 import axios from "axios";
-export const getAuthenticatedUser=async (token:string)=>{
+export const getAuthenticatedUser=async ()=>{
 
-    const user = await axios.get(`/api/users/me`,{
-    });
+    const user = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/me`,
+        {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+        }
+    );
     return user;
 }

@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Request as RequestType } from 'express';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -25,6 +27,10 @@ export class UserController {
   @Get()
   findAll() {
     return this.userService.findAll();
+  }
+  @Get('me')
+  findMe(@Req() request: RequestType) {
+    return this.userService.userInformation(request);
   }
 
   @Get(':id')
