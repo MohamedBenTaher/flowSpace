@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -23,8 +24,10 @@ export class PostController {
   }
 
   @Get()
-  findAll() {
-    return this.postService.findAll();
+  async findAll(@Query('cursor') cursor?: string) {
+    const nextCursor = cursor ? { id: parseInt(cursor, 10) } : undefined;
+
+    return this.postService.findMany(nextCursor);
   }
 
   @Get(':id')

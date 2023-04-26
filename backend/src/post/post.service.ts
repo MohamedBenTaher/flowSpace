@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PostService {
@@ -12,6 +13,20 @@ export class PostService {
 
   findAll() {
     return this.prisma.post.findMany();
+  }
+  async findMany(cursor?: Prisma.PostWhereUniqueInput) {
+    const limit = 10;
+    const where = cursor ? { id: { gt: cursor.id } } : {};
+
+    const posts = await this.prisma.post.findMany({
+      where,
+      orderBy: { id: 'asc' },
+      take: limit,
+    });
+
+    const nextCursor = posts.length ? posts[posts.length - 1].id : null;
+
+    return { posts, nextCursor };
   }
 
   findOne(id: number) {

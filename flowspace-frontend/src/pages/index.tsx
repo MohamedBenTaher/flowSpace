@@ -6,6 +6,8 @@ import { useAuth } from '@/Context/Context';
 import { useQuery } from '@tanstack/react-query';
 import { getAuthenticatedUser } from '@/services/user/api';
 import { log } from 'console';
+import Posts from '@/Components/Post/Posts/Posts';
+import NewPostForm from '@/Components/Post/Form/NewPostForm';
 
 export default function Home() {
   const { user, setUser } = useAuth();
@@ -21,7 +23,8 @@ export default function Home() {
       <Navbar />
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="">Home Page</div>
-        <div>{user?.email}</div>
+        <NewPostForm/>
+        <Posts/>
       </main>
     </>
   );
