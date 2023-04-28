@@ -16,7 +16,7 @@ export class PostService {
   }
   async findMany(cursor?: Prisma.PostWhereUniqueInput) {
     const limit = 10;
-    const where = cursor ? { id: { gt: cursor.id } } : {};
+    const where = cursor.id ? { id: { gt: cursor.id } } : {};
 
     const posts = await this.prisma.post.findMany({
       where,
@@ -24,9 +24,13 @@ export class PostService {
       take: limit,
     });
 
-    const nextCursor = posts.length ? posts[posts.length - 1].id : null;
+    const nextId = posts.length ? posts[posts.length - 1].id : null;
 
-    return { posts, nextCursor };
+    return {
+      data: posts,
+      nextId,
+      previousId: posts.length > limit ? posts[posts.length - limit]?.id : 0,
+    };
   }
 
   findOne(id: number) {

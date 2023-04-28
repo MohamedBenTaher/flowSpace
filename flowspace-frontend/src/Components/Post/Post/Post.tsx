@@ -1,10 +1,11 @@
 import React from 'react'
+import { CreatePost } from '../dto/create-post.dto'
 
-const Post = ({title,content}) => {
+const Post = (props:CreatePost) => {
   return (
-    <div className="max-w-max h-auto flex items-center justify-start flex-col">
-      <h3>{title}</h3>
-      <p>{content}</p>
+    <div className="max-w-full min-h-full h-96 flex items-start p-2 justify-start flex-col border-2 border-gray-400 rounded-lg my-2 shadow-slate-400 shadow-sm">
+      <h3>{props.content}</h3>
+      <p>{props.published}</p>
     </div>
   )
 }

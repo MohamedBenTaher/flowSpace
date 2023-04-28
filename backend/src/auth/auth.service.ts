@@ -285,7 +285,7 @@ export class AuthService {
         },
         {
           secret: jwtConstants.secret,
-          expiresIn: 60 * 15,
+          expiresIn: jwtConstants.access_token_expiration,
         },
       ),
       this.jwtService.signAsync(
@@ -295,7 +295,7 @@ export class AuthService {
         },
         {
           secret: jwtConstants.secret,
-          expiresIn: 60 * 60 * 24 * 7,
+          expiresIn: jwtConstants.refresh_token_expiration,
         },
       ),
     ]);

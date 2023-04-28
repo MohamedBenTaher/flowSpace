@@ -101,13 +101,13 @@ export class AuthController {
       httpOnly: true, // prevent XSS attacks
       secure: true, // only send over HTTPS
       sameSite: 'none',
-      maxAge: jwtConstants.access_token_expiration, // set expiration time
+      maxAge: jwtConstants.access_token_expiration * 1000, // set expiration time
     });
     response.cookie('refresh_token', tokens.refresh_token, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: jwtConstants.refresh_token_expiration,
+      maxAge: jwtConstants.refresh_token_expiration * 1000,
     });
     response.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     response.setHeader('Access-Control-Allow-Credentials', 'true');

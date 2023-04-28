@@ -1,24 +1,55 @@
 import React from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import 'tailwindcss/tailwind.css';
+import { useMutation ,useQueryClient } from '@tanstack/react-query';
+import { CreatePost } from '../dto/create-post.dto'
+import { createPost } from '@/services/post/api';
+import axios from 'axios';
 
 const validationSchema = Yup.object().shape({
-  postContent: Yup.string()
+  content: Yup.string()
     .max(280, 'Post content must be less than 280 characters')
     .required('Required'),
 });
+type Post ={
+  content:string;
+  published:Boolean
+}
 
-const initialValues = {
-  postContent: '',
+const initialValues:Post = {
+  content: '',
+  published:true
 };
+interface Props {
+
+  setCreated: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 const NewPostForm = () => {
-  const handleSubmit = (values, { resetForm }) => {
+  const queryClient=useQueryClient()
+  const mutation=useMutation({
+    mutationFn:(values:Post)=>{
+      console.log('reached mutation')
+      return  axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/post`,values,
+      {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+      }
+  )
+    }
+  },
+  );
+  const handleSubmit = (values:Post, { resetForm }:FormikHelpers<Post>) => {
+    mutation.mutate(values)
+    setCreated(prev=>!prev)
+ 
+    queryClient.invalidateQueries(['posts'])
     console.log(values);
     resetForm();
   };
-
   return (
     <Formik
       initialValues={initialValues}
@@ -26,21 +57,21 @@ const NewPostForm = () => {
       onSubmit={handleSubmit}
     >
       {({ errors, touched }) => (
-        <Form>
+        <Form className='w-full'>
           <div className="flex flex-col items-start space-y-2">
             <div className="w-full">
               <Field
                 as="textarea"
-                name="postContent"
+                name="content"
                 className={`w-full p-2 border rounded-md ${
-                  errors.postContent && touched.postContent
+                  errors.content && touched.content
                     ? 'border-red-500'
                     : 'border-gray-300'
                 }`}
                 placeholder="What's on your mind?"
               />
-              {errors.postContent && touched.postContent && (
-                <div className="text-red-500">{errors.postContent}</div>
+              {errors.content && touched.content && (
+                <div className="text-red-500">{errors.content}</div>
               )}
             </div>
             <button
