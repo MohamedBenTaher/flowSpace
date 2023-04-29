@@ -82,12 +82,6 @@ const Posts = () => {
           <React.Fragment key={page?.nextId}>
             {page?.data?.map((post:any) => (
               <div
-                // style={{
-                //   border: '1px solid gray',
-                //   borderRadius: '5px',
-                //   padding: '10rem 1rem',
-                //   background: `hsla(${post.id * 30}, 60%, 80%, 1)`,
-                // }}
                 key={post?.id}
               >  
               <Post content={post.content} published={post.published}/>

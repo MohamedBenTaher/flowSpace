@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isOpen,setIsOpen]=useState(false)
   const [sideOpen,setSideOpen]=useState(false)
   return (
-    <header className="bg-slate-300">
+    <header className='bg-white'>
   <nav className=" flex max-w-7xl items-center justify-between lg:px-8" aria-label="Global">
     <div className="flex lg:flex-1 items-center justify-start">
     <a href="#" className="w-max h-max p-1.5 flex flex-row items-center justify-start">

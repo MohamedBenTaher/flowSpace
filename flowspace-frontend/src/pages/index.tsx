@@ -18,14 +18,12 @@ export default function Home() {
      console.log(logedUser.data)
      setUser(logedUser.data)
     return (
-    <>
+    <div className='bg-slate-100'>
       <Navbar />
       <main className="flex w-scren flex-col items-center justify-between p-4">
-        <div className="">Home Page</div>
         <NewPostHeader/>
-        <NewPostForm/>
         <Posts />
       </main>
-    </>
+    </div>
   );
 }
