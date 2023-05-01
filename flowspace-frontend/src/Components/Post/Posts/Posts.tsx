@@ -84,7 +84,7 @@ const Posts = () => {
               <div
                 key={post?.id}
               >  
-              <Post content={post.content} published={post.published}/>
+              <Post title={post.title} content={post.content} published={post.published}/>
               </div>
             ))}
           </React.Fragment>

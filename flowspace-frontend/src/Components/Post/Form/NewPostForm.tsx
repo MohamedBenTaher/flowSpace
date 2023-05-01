@@ -11,6 +11,9 @@ const validationSchema = Yup.object().shape({
   content: Yup.string()
     .max(280, 'Post content must be less than 280 characters')
     .required('Required'),
+  title: Yup.string()
+    .max(280, 'Title must have less than 50 characters')
+    .required('Required'),
 });
 type Post ={
   content:string;
@@ -44,8 +47,6 @@ const NewPostForm = () => {
   );
   const handleSubmit = (values:Post, { resetForm }:FormikHelpers<Post>) => {
     mutation.mutate(values)
-    setCreated(prev=>!prev)
- 
     queryClient.invalidateQueries(['posts'])
     console.log(values);
     resetForm();

@@ -9,11 +9,11 @@ export default function App({ Component, pageProps:{session,...pageProps} }: App
   return (
 
     <QueryClientProvider client={queryClient}>
+       <AuthProvider>
         <SessionProvider session={session}>
-        <AuthProvider>
               <Component {...pageProps} />
-        </AuthProvider>
         </SessionProvider>
+        </AuthProvider>
         <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
 

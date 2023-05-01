@@ -1,4 +1,5 @@
 export type CreatePost={
+    title:string;
     content:string;
-    published:true;
+    published:boolean;
 }

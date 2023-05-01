@@ -1,14 +1,21 @@
 import Navbar from '@/Components/Navbar/Navbar'
 import NewPostForm from '@/Components/Post/Form/NewPostForm'
-import RichTextEditorForm from '@/Components/Post/Form/NewPostText'
+import MyForm from '@/Components/Post/Form/NewPostText';
+import RichTextInput from '@/Components/Post/Form/NewPostText';
+
+
+
+
 import React from 'react'
 
 const index = () => {
+
   return (
-    <div>
+    <div className='h-screen w-screen bg-slate-100'>
         <Navbar/>
-        <RichTextEditorForm/>
-        <NewPostForm/>
+        <div className='flex items-center justify-center p-2 m-4'>
+        <MyForm/>
+        </div>
     </div>
   )
 }

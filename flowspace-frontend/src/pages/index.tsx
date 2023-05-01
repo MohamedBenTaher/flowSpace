@@ -16,7 +16,10 @@ export default function Home() {
 
      const logedUser =useQuery(['user'], () => getAuthenticatedUser());
      console.log(logedUser.data)
-     setUser(logedUser.data)
+     if(logedUser && logedUser.data){
+      setUser(logedUser?.data)
+     }
+     
     return (
     <div className='bg-slate-100'>
       <Navbar />
