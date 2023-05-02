@@ -20,6 +20,7 @@ export class PostController {
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
+    console.log('created Post Payload', createPostDto);
     return this.postService.create(createPostDto);
   }
 

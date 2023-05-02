@@ -8,7 +8,11 @@ import { Prisma } from '@prisma/client';
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
   create(createPostDto: CreatePostDto) {
-    return this.prisma.post.create({ data: createPostDto });
+    try {
+      return this.prisma.post.create({ data: createPostDto });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findAll() {

@@ -71,7 +71,7 @@ const MyForm: React.FC = () => {
   const queryClient=useQueryClient()
   const mutation=useMutation({
     mutationFn:(values:CreatePost)=>{
-      console.log('reached mutation')
+      console.log('reached mutation',values)
       return  axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/post`,values,
       {
           withCredentials: true,
