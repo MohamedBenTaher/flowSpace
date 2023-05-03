@@ -8,7 +8,50 @@ import { CreatePost } from '../dto/create-post.dto';
 import axios from 'axios';
 import { useRouter } from "next/router";
 import * as Yup from 'yup';
+import ExampleTheme from "./theme/ExampleTheme";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import { HeadingNode, QuoteNode } from "@lexical/rich-text";
+import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { CodeHighlightNode, CodeNode } from "@lexical/code";
+import { AutoLinkNode, LinkNode } from "@lexical/link";
+import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import { TRANSFORMERS } from "@lexical/markdown";
 
+import ActionsPlugin from "./plugins/ActionsPlugin";
+import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
+function Placeholder() {
+  return <div className="editor-placeholder">Enter some rich text...</div>;
+}
+
+const editorConfig = {
+  // The editor theme
+  theme: ExampleTheme,
+  // Handling of errors during update
+  onError(error:any) {
+    throw error;
+  },
+  // Any custom nodes go here
+  nodes: [
+    HeadingNode,
+    ListNode,
+    ListItemNode,
+    QuoteNode,
+    CodeNode,
+    CodeHighlightNode,
+    TableNode,
+    TableCellNode,
+    TableRowNode,
+    AutoLinkNode,
+    LinkNode
+  ]
+};
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface RichTextInputProps {
@@ -46,18 +89,22 @@ const RichTextInput: React.FC<RichTextInputProps> = ({ label, name }) => {
   return (
     <div className="flex items-start justify-center flex-col">
       <label htmlFor={name}>{label}</label>
-      <ReactQuill
-        {...field}
-        value={field.value}
-        onChange={handleChange}
-        onBlur={() => helpers.setTouched(true)}
-        modules={modules}
-        className=" bg-white rounded-lg max-w-max"
-        placeholder="Post Content..."
-        style={{
-          minHeight: '700px !important',
-        }}
-      />
+      <LexicalComposer initialConfig={editorConfig}>
+      <div className="editor-container">
+        <ToolbarPlugin />
+        <div className="editor-inner">
+          <RichTextPlugin
+              contentEditable={<ContentEditable className="editor-input" />}
+              placeholder={<Placeholder />} ErrorBoundary={undefined}          />
+          <AutoFocusPlugin />
+          <ListPlugin />
+          <LinkPlugin />
+          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          <CodeHighlightPlugin />
+        </div>
+        <ActionsPlugin />
+      </div>
+    </LexicalComposer>
       {meta.touched && meta.error && (
         <div style={{ color: "red" }}>{meta.error}</div>
       )}
